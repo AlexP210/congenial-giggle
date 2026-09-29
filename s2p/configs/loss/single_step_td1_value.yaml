@@ -1,0 +1,8 @@
+# distillation loss configuration
+
+_target_: s2p.losses.td1_value_loss.TD1ValueLoss
+
+cfg:
+  latent_value_imagination_horizon: 1
+  lam: 1
+  rho: 1

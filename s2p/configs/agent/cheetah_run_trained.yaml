@@ -1,0 +1,14 @@
+# tdmcp2 teacher configuration
+
+_target_: s2p.models.agent_model.AgentModel
+
+encoder_model: ${encoder}
+dynamics_model: ${dynamics}
+reward_model: ${reward}
+value_model: ${value}
+planner: ${planner}
+policy_model: null
+
+cfg:
+  freeze: true
+  checkpoint_folder: /path/to/outputs/checkpoints/TRC_cheetah-run_4-20260714_193556/simulation_task_planning/best

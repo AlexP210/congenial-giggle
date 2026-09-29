@@ -1,0 +1,6 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.flops_evaluator.FLOPSEvaluator
+
+cfg:
+  device: ${device}

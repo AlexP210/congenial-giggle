@@ -1,0 +1,43 @@
+# Frozen PushCube visual PPO expert configuration
+
+_target_: s2p.models.ppo_policy_model.PPOPolicyModel
+
+task: ${task}
+
+cfg:
+  freeze: true
+  device: ${device}
+
+  # A ppo_visual_expert_fast.py run folder holds two checkpoints: `best_ckpt.pt`, the policy
+  # from the highest-scoring eval, which `training_summary.json` names as the expert, and
+  # `final_ckpt.pt`, whatever the last iteration left behind. Those two are the same policy
+  # only when the run stopped on its success threshold, which this one did -- it reports
+  # `threshold_reached: true` with both `final_success_rate` and `best_success_rate` at 1.0,
+  # so either file loads the same behaviour here.
+  checkpoint: ${data_dir}/maniskill/PushCube-v1.1-ppo-visual-wrist-224-pd_ee_delta_pos/final_ckpt.pt
+
+  # The camera the expert was trained through, which for this checkpoint is the one wrist
+  # camera at 224x224 (`camera_view: wrist` drops the task's own, so the image is 3 channels
+  # rather than 6). `maniskill_push_cube.yaml` already renders exactly that, and the model
+  # checks the channel count and the resolution against the checkpoint at construction --
+  # an expert has no way to tell a different view from a changed scene, so a mismatch has to
+  # be an error rather than a silently worse policy.
+  visual_key: rgb
+
+  # Order matters: this is concatenated in sequence and must reproduce the `state` vector the
+  # expert was trained on, which is `FlattenRGBDObservationWrapper`'s flattening of every
+  # non-sensor observation -- obs/agent/qpos, obs/agent/qvel and obs/extra/tcp_pose (9+9+7=25)
+  # for PushCube. That is ManiSkill's *insertion* order (`agent` before `extra`, `qpos` before
+  # `qvel`), not sorted, and the same concatenation frozen_dino_wm_push_cube.yaml documents
+  # for its own proprio encoder. Under an image obs mode the tasks withhold their privileged
+  # state, so this is proprioception and the tcp pose only, not a shortcut around the camera.
+  # A wrong order still yields a 25-dim vector, so only the width can be checked -- getting
+  # this wrong costs success rate silently. Set to null for an expert trained with
+  # `--no-include_state`, i.e. on pixels alone.
+  state_keys: [qpos, qvel, tcp_pose]
+
+  # Clamp to the task's action limits, so the action this returns is the one the env would
+  # actually execute. The actor's output is unbounded and ManiSkill's controller clips to its
+  # own box when it applies one, which is why this project's recorded datasets hold actions
+  # well outside [-1, 1] (see tools/clip_actions.py). Turn off to see the raw proposal.
+  clip_actions: true

@@ -1,0 +1,7 @@
+outputs
+*.egg-info
+wandb
+**__pycache__
+${data}/
+**png
+**npy

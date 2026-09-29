@@ -1,0 +1,16 @@
+# PushCube run of the online deterministic recipe.
+#
+# Everything that is not task-specific lives in `train_visual_online_deterministic.yaml`; only
+# the differences belong here. Task-agnostic changes go in the base so all three tasks get
+# them, and values the base already sets can be overridden below.
+#
+# PushCube is also the base's own default task, so the task override pins nothing the base would
+# not already have picked. It is spelled out anyway, so the three task configs stay symmetric and
+# so changing the base's default cannot silently move this run to another task.
+
+defaults:
+  - train_visual_online_deterministic
+  # Hydra requires every `override` entry after every plain one.
+  - override task: maniskill_push_cube
+
+  - _self_

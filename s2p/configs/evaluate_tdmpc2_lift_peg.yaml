@@ -1,0 +1,68 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_lift_peg
+
+  - model@tdmpc2: frozen_tdmpc2_lift_peg
+
+  # See evaluate_dino_wm_pusht.yaml: DINOWorldModel's objective is a terminal `state_value`,
+  # so the planner has to bootstrap it rather than sum a reward that is always zero.
+  - planner: mppi_with_value
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.planner_convergence: planner_convergence
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+
+  - _self_
+
+data_horizon: 2
+
+encoder: ${tdmpc2}
+dynamics: ${tdmpc2}
+reward: ${tdmpc2}
+value: ${tdmpc2}
+policy: ${tdmpc2}
+
+task:
+  cfg:
+    data_path: null
+    visual_observation_resolution: 64
+    sim_backend: physx_${device}
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 50
+      max_episode_steps: 200
+  real_task_planning:
+    cfg:
+      num_envs: 50
+      max_episode_steps: 200
+
+planner:
+  cfg:
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0.125
+    # Only scales the objective by discount^H; 1.0 leaves it exactly DINO-WM's.
+    discount: 1.0
+
+latent_dimension: 512
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

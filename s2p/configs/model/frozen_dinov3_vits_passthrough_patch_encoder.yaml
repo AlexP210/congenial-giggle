@@ -1,0 +1,14 @@
+# stochastic student configuration
+
+_target_: s2p.models.dinov3_passthrough_encoder_model.DINOV3PassthroughEncoderModel
+
+task: ${task}
+
+cfg:
+  resize_size: 224
+  model_name: dinov3_vits16
+  token_mode: patch
+  freeze: True
+  checkpoint: ${checkpoint_dir}/dino/dinov3_vits16_pretrain_lvd1689m-08c60483.pth
+  device: ${device}
+  observation_key: rgb

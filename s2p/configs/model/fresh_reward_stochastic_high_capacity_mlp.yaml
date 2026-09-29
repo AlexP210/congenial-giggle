@@ -1,0 +1,16 @@
+# stochastic student configuration
+
+_target_: s2p.models.stochastic_mlp_reward_model.StochasticMLPRewardModel
+
+task: ${task}
+
+cfg:
+  hidden_dim: 1024
+  hidden_layers: 2
+  head_hidden_dim: 512
+  head_hidden_layers: 2
+  latent_dim: ${latent_dimension}
+  device: ${device}
+  freeze: False
+  checkpoint: null
+  sample_mean: false

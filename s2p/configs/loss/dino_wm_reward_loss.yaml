@@ -1,0 +1,5 @@
+# probe loss configuration
+
+_target_: s2p.losses.dino_wm_reward_loss.DINOWMRewardLoss
+
+cfg: {}

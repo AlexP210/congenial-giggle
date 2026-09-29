@@ -1,0 +1,24 @@
+# planner convergence evaluator configuration
+
+_target_: s2p.evaluators.planner_convergence_evaluator.PlannerConvergenceEvaluator
+
+task: ${task}
+
+cfg:
+  # This evaluator measures one env at a time, so it always builds a single-env env of its
+  # own: batching would change what it reports rather than just speed it up. Stated
+  # explicitly so it never inherits a width some other component raised.
+  num_envs: 1
+  # This evaluator switches the planner's `collect_convergence_info` on for its own plans,
+  # so the trace does not have to be enabled in the planner config (doing so would make
+  # every plan of the control loop pay for it)
+  #
+  # Plans run from the one reset state; the curves are their mean
+  num_plans: 8
+  # RMS shift of the action mean below which the plan counts as settled
+  convergence_tolerance: 0.01
+  # Seed for the reset, so that every call plans from the same initial state. Left unset
+  # because only some envs take one: ManiSkill and PushT forward a reset seed (use
+  # `${seed}`), the dm_control wrappers take no reset arguments and would raise.
+  reset_seed: ${seed}
+  device: ${device}

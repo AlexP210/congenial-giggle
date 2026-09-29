@@ -1,0 +1,61 @@
+# TEMP config for FLOPs / latency measurement only -- NOT a planning result.
+#
+# Every checkpoint named below is simply the best that exists on disk today; where a cell has
+# no properly-trained reward head the config still points at one of the right shape, because a
+# FLOPs count and a plan-latency measurement depend on architecture, not on weights. Generated
+# 2026-09-23. The non-temp evaluate_*.yaml files remain the ones to cite.
+#
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+#
+# The LiftPeg counterpart of evaluate_dino_wm_push_cube.yaml.
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_lift_peg
+
+  - model@dino_wm: frozen_dino_wm_lift_peg
+  - model@dino_wm_reward: frozen_dino_wm_reward_model_lift_peg
+
+  # See evaluate_dino_wm_pusht.yaml: DINOWorldModel's objective is a terminal `state_value`,
+  # so the planner has to bootstrap it rather than sum a reward that is always zero.
+  - planner: mppi_without_value
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+  # - evaluators@evaluators.rollout_error: rollout_error
+  - evaluators@evaluators.planner_convergence: planner_convergence
+
+  - _self_
+
+data_horizon: 2
+
+encoder: ${dino_wm}
+dynamics: ${dino_wm}
+reward: ${dino_wm_reward}
+value: null
+policy: null
+
+planner:
+  cfg:
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0
+    # Only scales the objective by discount^H; 1.0 leaves it exactly DINO-WM's.
+    discount: 1.0
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

@@ -1,0 +1,10 @@
+# input-gradient saliency evaluator configuration
+
+_target_: s2p.evaluators.saliency_evaluator.SaliencyEvaluator
+
+task: ${task}
+
+cfg:
+  n_projections: 512
+  device: ${device}
+  seed: ${seed}

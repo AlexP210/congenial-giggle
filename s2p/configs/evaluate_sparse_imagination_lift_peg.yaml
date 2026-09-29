@@ -1,0 +1,84 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+#
+# The LiftPeg counterpart of evaluate_sparse_imagination_push_cube.yaml. Mutually exclusive
+# with every DINO-WM-family config in the same process (see s2p.lib.sparse_imagination_path).
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_lift_peg
+
+  - model@sparse_imagination: frozen_sparse_imagination_lift_peg
+  - model@sparse_imagination_reward: frozen_sparse_imagination_reward_model_lift_peg
+
+  # The world model is encoder and dynamics only -- it has no reward head and no
+  # goal-distance `state_value`, so the planner scores the fitted reward head below
+  # and `use_value: false` is the only correct setting. See the wrapper's
+  # "Where the reward comes from".
+  - planner: mppi_without_value
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+  # - evaluators@evaluators.rollout_error: rollout_error
+  - evaluators@evaluators.planner_convergence: planner_convergence
+
+  - _self_
+
+data_horizon: 2
+
+encoder: ${sparse_imagination}
+dynamics: ${sparse_imagination}
+reward: ${sparse_imagination_reward}
+value: null
+policy: null
+
+# Evaluator settings match evaluate_s2p_*.yaml / evaluate_tdmpc2_*.yaml (num_episodes is the
+# evaluators' default 50 in all of them). num_envs is 8 rather than their 50: at 1 env this
+# model already peaks at ~1.5 GB under this planner (~4 GB for the other DINO-family
+# baselines, which share this setting), so 50 would not fit on an L40S, and batching only
+# changes wall clock, not results.
+task:
+  cfg:
+    sim_backend: physx_${device}
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 8
+      max_episode_steps: 200
+  real_task_planning:
+    cfg:
+      num_envs: 8
+      max_episode_steps: 200
+
+# Pin the kept-patch subset for the model's lifetime. `drop: true` means the latent carries a
+# random 98 of the 196 patch tokens, and the frozen config redraws that subset on every
+# `set_goal`, i.e. every episode -- which the predictor tolerates (frame-only positional
+# embeddings) and `state_value` handles by re-encoding the goal, but the reward head does not:
+# its cross-attention queries are specific to the subset it was fitted on, and offline training
+# never called `set_goal`, so it only ever saw the initial `kept_patch_seed: 0` draw. See
+# frozen_sparse_imagination_reward_model_lift_peg.yaml.
+planner:
+  cfg:
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0
+    # An ordinary discount over the fitted per-step reward, not a scale on a terminal
+    # objective as it was upstream.
+    discount: 1.0
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

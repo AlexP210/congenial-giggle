@@ -1,0 +1,9 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.policy_latency_evaluator.PolicyLatencyEvaluator
+
+task: ${task}
+
+cfg:
+  num_queries: 100
+  device: ${device}

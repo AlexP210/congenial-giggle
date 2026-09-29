@@ -1,0 +1,18 @@
+# stochastic student configuration
+
+_target_: s2p.models.stochastic_mlp_student_encoder_model.StochasticMLPStudentEncoderModel
+
+task: ${task}
+teacher: ${teacher_encoder}
+
+cfg:
+  hidden_dim: 512
+  ema_decay: 0.99
+  hidden_layers: 1
+  head_hidden_dim: 512
+  head_hidden_layers: 1
+  latent_dim: ${latent_dimension}
+  device: ${device}
+  freeze: False
+  checkpoint: null
+  sample_mean: false

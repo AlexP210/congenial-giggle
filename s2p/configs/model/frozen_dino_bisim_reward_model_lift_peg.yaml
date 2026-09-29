@@ -1,0 +1,43 @@
+# Frozen reward head over a DINO-Bisim latent, for the ManiSkill LiftPeg task.
+#
+# Not DINO-Bisim-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has -- the head reads its token count and width off a probe encode, so the compact
+# bisimulation token needs no config change. What makes this config DINO-Bisim's is the
+# checkpoint below, which was fitted against that world model's latent and is meaningless over
+# any other.
+#
+# Written by train_dino_bisim_reward_lift_peg.yaml. `freeze: true` also means `save_to_file`
+# records a reference to that checkpoint rather than copying its weights.
+#
+# INCREMENT 3 (the 72h run). Fitted on increment 3's `model_best.pth` (epoch 24, val 0.1925) in
+# 2026-09-18/08-35-15_lift_peg. That is the FIRST epoch of the increment and NOT its last
+# (epoch 30, 0.1945), so `frozen_dino_bisim_lift_peg.yaml` must set
+# `resume_checkpoint: model_best.pth` -- the one cell where the distinction changes the
+# weights this head is scored over.
+#
+# The increment-2 (48h) head this replaced is kept alongside as
+# `frozen_dino_bisim_reward_model_lift_peg_inc2.yaml`; pair each only with the world-model
+# config of the same increment.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  # Round 2 of 2: a 4h pass warm-started from the round-1 head (BestCkpt-20260920_153059) on
+  # the same world model (epoch 24), ~8h / ~170K steps in total. The Adam moments and step
+  # counter were reset, not resumed. Read from inc3_runs/, the copy fetch_inc3_runs.sh takes
+  # from Nibi.
+  checkpoint: ${output_dir}/../inc3_runs/reward_heads/DINOBisimReward_lift_peg_CorrectData_BestCkpt_Cont-20260924_022425/loss/best_total_loss/reward.pt
+  freeze: true

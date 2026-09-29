@@ -1,0 +1,14 @@
+# tdmcp2 teacher configuration
+
+_target_: s2p.models.agent_model.AgentModel
+
+encoder_model: ${encoder}
+dynamics_model: ${dynamics}
+reward_model: ${reward}
+value_model: null
+planner: ${planner}
+policy_model: null
+
+cfg:
+  freeze: true
+  checkpoint_folder: ???

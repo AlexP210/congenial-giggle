@@ -1,0 +1,29 @@
+# loss evaluator, but evaluated over freshly collected on-policy data
+
+_target_: s2p.evaluators.online_wrapper.OnlineWrapper
+
+task: ${task}
+
+# The offline evaluators to run over the online-collected dataset. All of them see the one
+# rollout, so measuring something else about the same on-policy data costs a dataset pass rather
+# than another `num_transitions` steps of planning -- add it here instead of adding a second
+# `OnlineWrapper`. With more than one entry each evaluator's keys are prefixed with its name
+# (`loss/total_loss`); a mapping (`{loss: ${evaluators.loss}}`) chooses those names explicitly.
+evaluators:
+  - ${saliency}
+
+cfg:
+  # Envs to collect from at once, in lockstep. Batching only changes the wall clock:
+  # `num_transitions` is a total across the envs, so the same amount of data is collected
+  # either way. Only ManiSkill tasks can go above 1, and only on a physx_cuda
+  # `task.cfg.sim_backend`; dm_control refuses.
+  num_envs: 1
+  action_mode: plan
+  num_transitions: 50
+  horizon: 50
+  overlap_ratio: 0.0
+  # Keep image observations in the buffer as uint8 rather than float32
+  store_images_as_uint8: True
+  load_device: cpu
+  batch_device: ${device}
+  seed: ${seed}

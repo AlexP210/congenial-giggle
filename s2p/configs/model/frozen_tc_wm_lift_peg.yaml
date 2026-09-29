@@ -1,0 +1,289 @@
+# Frozen TC-WM teacher configuration -- increment 3 (the 72h run).
+#
+# The only cell where increment 3 added nothing: nothing in that final 23h (epochs 15-19 in
+# 2026-09-10/10-15-11_lift_peg) beat increment 2's epoch 11, so the trainer never wrote a
+# `model_best.pth` there and the 72h best is still a file in the increment-2 folder. That
+# folder's copy in inc3_runs/ holds ONLY model_best.pth (fetch_inc3_runs.sh takes nothing else
+# from it), and the Trainer raises on a resume_folder with no model_latest.pth -- so this
+# config resumes from the increment-3 folder and names the increment-2 file by absolute path
+# in `resume_checkpoint`, which loads over it. `frozen_tc_wm_lift_peg_inc2.yaml` is epoch 14
+# (latest); each is tied to the reward head fitted on it, so the two are not interchangeable.
+
+_target_: s2p.models.tc_world_model.get_or_create
+
+# `cfg.tcwm_cfg` below is TC-WM's own train config, and it is full of `_target_`s
+# (model, encoder, projector, predictor, decoder, method.objectives, ...) that Trainer
+# instantiates itself, in order, once it knows the dataset dimensions — the projector alone
+# needs visual_emb_dim/proprio_emb_dim/projected_dim injected at that point. Hydra
+# instantiates recursively by default and would build them here instead; it gets as far as
+# `tcwm_cfg.model` and fails with "VWorldModel.__init__() missing 7 required positional
+# arguments". `_recursive_` is only honoured as "do not instantiate my kwargs" on a node
+# that has a `_target_`, so it has to sit here rather than on `tcwm_cfg`; the cost is that
+# `task` below arrives as a config too, which TCWorldModel.__init__ rebuilds (get_or_create
+# memoizes, so it is the same task object every other model is handed).
+_recursive_: false
+
+task: ${task}
+
+cfg:
+  freeze: true
+  device: ${device}
+  # The task's dataset ships DINOv3 patch features precomputed with this very backbone
+  # (196x384, dinov3_vits16), so encode_visual short-circuits to them and offline batches
+  # never run the ViT. Leave unset only if you want to force the live visual path.
+  dino_feature_key: dino_patch_features
+  # Order matters: this is concatenated in sequence and must reproduce liftpeg_dset's
+  # PROPRIO_KEYS = [obs/agent/qpos, obs/agent/qvel, obs/extra/tcp_pose] (9+9+7=25), which
+  # is what this model's proprio encoder was trained on — and, because TC-WM stores the raw
+  # proprio vector in the latent itself, also what its predictor predicts. qpos/qvel are
+  # added to the task's observation by the task config.
+  proprio_keys: [qpos, qvel, tcp_pose]
+  visual_key: rgb
+
+  # Which file inside `checkpoints/` to load. `Trainer.init_models` only ever reads
+  # `model_latest.pth` -- the name is written out literally in TC-WM/train.py:739 -- so a run
+  # whose best epoch is not its last is unreachable through `resume_folder` alone. This is
+  # loaded over it by `TCWorldModel.__init__`, through the same native-checkpoint path the
+  # Trainer would have used. null keeps the Trainer's own choice.
+  #
+  # Increment 2's model_best.pth: epoch 11 (val 0.1909) rather than that folder's
+  # `model_latest.pth` at epoch 14 (val 0.1975). LiftPeg is the one TC-WM cell where the two
+  # genuinely differ, and epoch 11 is the best over all three increments. An absolute path,
+  # not a bare filename, because it lives outside `resume_folder` below -- see the header.
+  resume_checkpoint: ${output_dir}/../inc3_runs/tcwm/2026-08-26/12-17-16_lift_peg/checkpoints/model_best.pth
+
+  # Flattened from the training run's own hydra.yaml (Trainer reads these keys flat).
+  # Key order and grouping follow TC-WM's conf/train_tcwm.yaml + conf/common.yaml so the
+  # two stay diffable. Interpolations are deliberately NOT used for intra-block refs: they
+  # resolve from the composed config root, not from here, so `${img_size}` would miss.
+  # Literals are inlined instead — keep them in sync by hand. Root-level refs
+  # (${data_dir}, ${checkpoint_dir}) do resolve.
+  tcwm_cfg:
+    # folder containing the run to resume from. Trainer.init_models loads
+    # ${resume_folder}/checkpoints/model_latest.pth from it, and raises if the folder is
+    # set but holds no checkpoint -- but `cfg.resume_checkpoint` above then loads
+    # model_best.pth over that, so the weights this model plans with come from there.
+    # Between them these are the ONLY thing that puts trained weights into the model, so
+    # a wrong path here plans with a randomly initialized TC-WM -- a failure no rollout
+    # looks obviously wrong under.
+    #
+    # Whichever is chosen here has to be the one the frozen reward head was fitted on
+    # (frozen_tc_wm_reward_model_lift_peg.yaml): that head cross-attends this model's latent
+    # window, so it is tied to these exact weights.
+    #
+    # The increment-3 folder, only to satisfy the Trainer: its model_latest.pth (epoch 19) is
+    # loaded and then entirely overwritten by `resume_checkpoint` above. Read from inc3_runs/,
+    # the copy fetch_inc3_runs.sh takes from Nibi.
+    resume_folder: ${output_dir}/../inc3_runs/tcwm/2026-09-10/10-15-11_lift_peg
+    ckpt_base_path: ${output_dir}/../tcwm
+    data_dir: ${data_dir}
+    debug: false
+    val_only: false
+    description: ""
+
+    img_size: 224
+    # Must equal task.cfg.frame_skip: the task's env applies this many primitive actions
+    # per step and its dataset concatenates the same ones, so one world model step is one
+    # env step. TCWorldModel raises if the two action widths disagree.
+    frameskip: 1
+    # Only 1 is supported (proprio and action tiled into the feature dimension); see
+    # TCWorldModel.__init__ for why TC-WM's concat_dim=0 path cannot carry a projector.
+    concat_dim: 1
+    normalize_action: true
+
+    # Must equal task.cfg.num_frames — TCWorldModel checks this one.
+    num_hist: 3
+    num_pred: 1
+    has_predictor: true
+    has_decoder: true
+
+    # action encoder
+    action_emb_dim: 32
+    num_action_repeat: 1
+
+    # proprio encoder
+    proprio_emb_dim: 64
+    num_proprio_repeat: 1
+
+    # The projection that makes the latent task-centric: (visual 384 + proprio 64) -> 256.
+    # A token is then 256 + 32 (action) + 25 (raw proprio) = 313 wide, which is what the
+    # predictor was built for; TCWorldModel cross-checks that sum against the predictor's
+    # position embedding.
+    encoder_emb_dim: 384
+    projected_dim: 256
+    compressed_patches: 49
+    original_patches: 196
+
+    alignment_dim: 64
+    alignment_temperature: 0.01
+    alignment_loss_weight: 0.1
+
+    env:
+      name: lift_peg
+      args: []
+      kwargs:
+        # TC-WM's own conf/env/lift_peg.yaml writes this as ${env.dataset.data_path};
+        # inlined here because an interpolation inside this block resolves from the composed
+        # config root, where there is no `env`. Only its own env wrappers read it.
+        goal_data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+      dataset:
+        # Matches the task's own data_path (configs/task/maniskill_lift_peg.yaml). The camera
+        # is read off the file itself and both rgb and
+        # dino_patch_features are looked up under it, so liftpeg_dset needs no camera= here.
+        # This is the exact recording the run below was trained on, so the action/proprio
+        # normalization stats recomputed here match the training ones.
+        _target_: datasets.liftpeg_dset.load_liftpeg_slice_train_val
+        data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+        n_rollout: null
+        split_ratio: 0.8
+        normalize_action: true
+        transform:
+          _target_: datasets.img_transforms.default_transform
+          img_size: 224
+      decoder_path: null
+      num_workers: 16
+
+    model:
+      _target_: models.visual_world_model.VWorldModel
+      image_size: 224
+      num_hist: 3
+      num_pred: 1
+      train_encoder: false
+      train_predictor: true
+      train_decoder: true
+      train_decoder_grad: false
+      train_emb_decoder_grad: true
+      projected_dim: 256
+      alignment_dim: 64
+
+    encoder:
+      _target_: models.visual_encoder.dinov3.DinoV3Encoder
+      name: dinov3_vits16
+      feature_key: x_norm_patchtokens
+      repo_dir: ${project_root}/dependencies/dinov3
+      weights: ${checkpoint_dir}/dino/dinov3_vits16_pretrain_lvd1689m-08c60483.pth
+
+    projector:
+      _target_: models.projector.mlp.MLP
+      hidden_features: 128
+      num_layers: 2
+      dropout: 0.1
+      activation: ReLU
+
+    predictor:
+      _target_: models.predictor.vit.ViTPredictor
+      depth: 6
+      heads: 16
+      mlp_dim: 2048
+      pool: mean
+      dropout: 0.1
+      emb_dropout: 0
+
+    # Two-stage: projected (256) -> emb_decoder_mlp -> 384 -> VQVAE -> pixels. Only
+    # `decode` uses it; planning never leaves the latent.
+    decoder:
+      _target_: models.decoder.vqvae.ProjectedVQVAEDecoder
+      channel: 64
+      n_embed: 2048
+      n_res_block: 4
+      n_res_channel: 128
+      quantize: false
+      hidden_dim: 512
+      num_layers: 2
+      sg_before_vqvae: true
+
+    emb_decoder:
+      _target_: models.decoder.emb_decoder_identity.EmbDecoderIdentity
+
+    action_encoder:
+      _target_: models.proprio_encoder.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    proprio_encoder:
+      _target_: models.proprio_encoder.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    # Training losses. Rebuilt because Trainer builds them before it can load a
+    # checkpoint, and because InfoNCEAlignmentObjective owns a Linear that travels in the
+    # checkpoint. Nothing here affects inference.
+    method:
+      objectives:
+        - _target_: models.objective.objectives.ConsistencyLossObjective
+          projected_dim: 256
+          loss_weight: 1.0
+        - _target_: models.objective.task.objectives.InfoNCEAlignmentObjective
+          _partial_: true
+          alignment_dim: 64
+          projected_dim: 256
+          concat_dim: 1
+          num_pred: 1
+          loss_weight: 0.1
+          temperature: 0.01
+          alignment_regularization: 0.001
+
+    alignment:
+      open_alignment: true
+      state_consistency_loss_weight: 0.1
+      alignment_regularization: 0.001
+      latent_dynamics_loss_weight: 1.0
+
+    proprio_pred:
+      loss_type: mse
+      space: raw
+      weight: 1.0
+      infonce_temp: 0.1
+
+    training:
+      seed: 0
+      epochs: 100
+      batch_size: 16
+      save_every_x_epoch: 1
+      save_best: true
+      reconstruct_every_x_batch: 500
+      num_reconstruct_samples: 2
+      encoder_lr: 1.0e-06
+      decoder_lr: 0.0003
+      predictor_lr: 0.0005
+      action_encoder_lr: 0.0005
+
+    # Rollout/video knobs Trainer reads through getattr defaults, and the latent export it
+    # reads directly. Kept so the block round-trips against conf/common.yaml.
+    rollout_num: 20
+    rollout_parallel: 1
+    rollout_batch: 1
+    rollout_save_workers: 2
+    rollout_debug: true
+    rollout_uniform: true
+    rollout_fixed_indices: null
+    video_save: false
+    latent_export:
+      enabled: false
+      output_path: null
+      splits: ["train"]
+      rgb_key: agentview_image
+      latent_grid_size: 14
+      mode: trajectory
+
+    # Planning evals during training; plan_cfg_path null disables them, but Trainer
+    # still reads plan_settings.* so the block has to exist.
+    plan_settings:
+      plan_cfg_path: null
+      planner: [gd, cem]
+      goal_source: [dset, random_state]
+      goal_H: [5]
+      alpha: [0.1, 1]
+
+    wandb:
+      project: tasuw
+      name: s2p_frozen_teacher
+      entity: null
+
+    # Trainer overwrites these in __init__ (saved_folder <- os.getcwd(), the batch sizes
+    # <- training.batch_size / num_processes). Kept only so the block round-trips.
+    saved_folder: ${output_dir}/../tcwm
+    gpu_batch_size: 16
+    effective_batch_size: 16

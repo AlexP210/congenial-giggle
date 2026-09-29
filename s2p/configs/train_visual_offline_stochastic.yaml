@@ -1,0 +1,54 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: training
+  - trainer: offline
+  - task: maniskill_push_cube
+
+  - model@vision_encoder: frozen_dinov3_vits_passthrough_patch_encoder
+  - model@proprioception_encoder: identity_encoder_tcp_pose
+  
+  - model@teacher_encoder: vision_proprioception_joint_encoder
+  - model@student_encoder: fresh_student_encoder_stochastic_cap
+
+  - model@encoder: teacher_student_encoder
+  - model@dynamics: fresh_dynamics_stochastic_mlp
+  - model@reward: fresh_reward_stochastic_mlp
+  - model@value: fresh_tdmpc2
+  - model@policy: fresh_tdmpc2
+
+  - agent: fresh_agent
+
+  - planner: mppi_with_value
+
+  
+  - loss@loss_functions.distillation: stochastic_distillation
+  - loss@loss_functions.tdmpc2_value: tdmpc2_value_loss
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.tsne: tsne
+  - evaluators@evaluators.tsne_online: tsne_online
+  - evaluators@evaluators.loss: loss
+  - evaluators@evaluators.loss_online: loss_online
+  - evaluators@evaluators.rollout_error: rollout_error
+  - evaluators@evaluators.rollout_error_online: rollout_error_online
+  - evaluators@evaluators.planner_convergence: planner_convergence
+  
+  - _self_
+
+loss_function_weights:
+  distillation: 1.0
+  tdmpc2_value: 1.0
+
+latent_dimension: 512
+loss_horizon: 3
+data_horizon: 4
+device: cuda:0
+seed: 1
+
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???
+local_dir: null

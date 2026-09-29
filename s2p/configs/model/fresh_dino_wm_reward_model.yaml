@@ -1,0 +1,19 @@
+# stochastic student configuration
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  checkpoint: null
+  freeze: false

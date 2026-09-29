@@ -1,0 +1,11 @@
+# stochastic student configuration
+
+_target_: s2p.models.linear_encoder.LinearEncoder
+
+task: ${task}
+
+cfg:
+  latent_dim: ${latent_dimension}
+  device: ${device}
+  checkpoint: null
+  freeze: false

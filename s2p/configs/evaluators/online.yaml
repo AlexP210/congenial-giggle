@@ -1,0 +1,43 @@
+# Dataset metrics measured on freshly collected on-policy data -- several of them, over one rollout.
+#
+# The multi-metric form of the `*_online.yaml` configs. `OnlineWrapper` rolls the agent out once
+# and hands the resulting dataset to every evaluator listed under `evaluators`, so a second metric
+# costs a pass over that data rather than another `num_transitions` steps of planning, and one
+# environment is held rather than one per metric.
+#
+# The evaluators are deliberately not listed here: they are what a run config chooses, and
+# composing this without naming one should fail rather than silently collect data for nobody.
+#
+#   - evaluators@evaluators.online: online
+#   - evaluators@evaluators.online.evaluators.loss: loss
+#   - evaluators@evaluators.online.evaluators.rollout_error: rollout_error
+#
+# Their keys are then prefixed with the names composed into (`online/loss/total_loss`).
+#
+# They all see the same windows, so they must all want the same ones: `horizon` and
+# `num_transitions` below belong to the wrapper, not to any of them. `attention` and `saliency`
+# want one long trajectory rather than training-length windows, so they need a wrapper of their
+# own -- see `attention_online.yaml`.
+#
+# There is no `evaluation_interval` here: `TrainingRunner` on this branch runs every evaluator on
+# its own `cfg.evaluation_interval`, so the wrapper is called as often as everything else.
+
+_target_: s2p.evaluators.online_wrapper.OnlineWrapper
+
+task: ${task}
+
+cfg:
+  # Envs to collect from at once, in lockstep. Batching only changes the wall clock:
+  # `num_transitions` is a total across the envs, so the same amount of data is collected
+  # either way. Only ManiSkill tasks can go above 1, and only on a physx_cuda
+  # `task.cfg.sim_backend`; dm_control refuses.
+  num_envs: 1
+  action_mode: plan
+  num_transitions: 1000
+  horizon: ${data_horizon}
+  overlap_ratio: 0.0
+  # Keep image observations in the buffer as uint8 rather than float32
+  store_images_as_uint8: True
+  load_device: cpu
+  batch_device: ${device}
+  seed: ${seed}

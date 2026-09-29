@@ -1,0 +1,19 @@
+# PickCube run of the online stochastic recipe.
+#
+# Everything that is not task-specific lives in `train_visual_online_stochastic.yaml`; only
+# the differences belong here. Task-agnostic changes go in the base so all three tasks get
+# them, and values the base already sets can be overridden below.
+
+defaults:
+  - train_visual_online_stochastic
+
+  # PickCube only: its goal marker is hidden from every camera, so the target reaches the encoder
+  # through `goal_pos` or not at all. 28-wide proprio here against 25 on the other tasks, matching
+  # what the DINO-based agents get -- see vision_proprioception_goal_joint_encoder.yaml. Hydra
+  # requires every `override` entry after every plain one, so the new group is added first.
+  - model@goal_proprioception_encoder: identity_encoder_goal_pos
+
+  - override task: maniskill_pick_cube
+  - override model@teacher_encoder: vision_proprioception_goal_joint_encoder
+
+  - _self_

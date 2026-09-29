@@ -1,0 +1,56 @@
+# TEMP frozen reward head over a Sparse Imagination latent, for the ManiSkill PickCube task.
+#
+# Not Sparse-Imagination-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has -- the head reads its token count and width off a probe encode, so a `drop98` latent
+# needs no config change. What makes this config Sparse Imagination's is the checkpoint below,
+# which was fitted against that world model's latent and is meaningless over any other.
+#
+# Written by train_sparse_imagination_reward_pick_cube.yaml. `freeze: true` also means
+# `save_to_file` records a reference to that checkpoint rather than copying its weights.
+#
+# ### The kept-patch subset has to be pinned to use this head
+#
+# frozen_sparse_imagination_pick_cube.yaml runs `drop: true` with
+# `resample_kept_patches_on_goal: true`, so `set_goal` redraws which 98 of the 196 patch
+# tokens the latent carries -- once per episode. That is right for the world model, whose
+# predictor has frame-only positional embeddings and so is deliberately indifferent to which
+# patches it gets, and right for `state_value`, which re-encodes the goal under the new subset.
+#
+# It is wrong for this head. The cross-attention pools a flat token sequence with learned
+# queries, so its weights are specific to the subset it was fitted on -- and offline training
+# never calls `set_goal`, meaning the head saw only the initial seeded draw. Leaving the
+# resample on would score every episode after the first against tokens the head never trained
+# against.
+#
+# So an evaluation using this reward head must also set, on the world model:
+#
+#   sparse_imagination.cfg.resample_kept_patches_on_goal: false
+#
+# with `kept_patch_seed` left at the 0 the training run used, which pins one subset for the
+# model's lifetime and makes it the same one. `state_value` is unaffected -- it re-encodes the
+# goal either way.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  # TEMP -- shape only. This is the 2026-09-23 00:* head, fitted before the dataloader fix
+  # (num_workers=0 against an NFS-mmapped dataset), so it reached 4-7K steps against the
+  # 80-99K its push_cube/lift_peg siblings got: ~5% trained. It has the right architecture
+  # and loads cleanly, which is all a FLOPs/latency measurement needs. Do NOT use it for
+  # planning results -- frozen_sparse_imagination_reward_model_pick_cube.yaml is the real one, still
+  # carrying a  placeholder until the refit lands.
+  checkpoint: ${output_dir}/checkpoints/SparseImaginationReward_pick_cube_CorrectData_BestCkpt-20260923_004917/loss/best_total_loss/reward.pt
+  freeze: true

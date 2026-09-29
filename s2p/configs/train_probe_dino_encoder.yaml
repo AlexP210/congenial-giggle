@@ -1,0 +1,39 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: training
+  - trainer: offline
+  - task: maniskill_push_cube
+
+  - model@teacher_encoder: frozen_dinov3_vits_passthrough_patch_encoder
+  - model@student_encoder: fresh_cap_probe_encoder
+  - model@encoder: teacher_student_encoder
+
+  - model@dynamics: fresh_dynamics_deterministic_mlp
+  - model@reward: fresh_reward_deterministic_mlp
+  - model@value: fresh_tdmpc2
+  - model@policy: fresh_tdmpc2
+
+  - agent: fresh_agent
+
+  - planner: mppi_with_value
+
+  - loss@loss_functions.probe: probe_push_cube_cube_pose
+
+  - evaluators@evaluators.loss: loss
+
+  - _self_
+
+loss_function_weights:
+  probe: 1.0
+
+latent_dimension: 512
+probe_target_path: ["state", "cube_pose", ":,:,0:3"]
+
+device: cuda:0
+seed: 1
+
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

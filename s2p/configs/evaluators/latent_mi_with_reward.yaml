@@ -1,0 +1,5 @@
+defaults:
+  - latent_mi_default
+
+cfg:
+  target_variable_name: reward

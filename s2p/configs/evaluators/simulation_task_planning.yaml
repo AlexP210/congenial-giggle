@@ -1,0 +1,29 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.simulation_task_evaluator.SimulationTaskEvaluator
+
+task: ${task}
+
+cfg:
+  # Episodes to run at once, in lockstep. Batching only changes the wall clock: the envs
+  # are independent, every per-episode metric is still recorded per env, and `num_episodes`
+  # is what is reported on. Only ManiSkill tasks can go above 1, and only on a physx_cuda
+  # `task.cfg.sim_backend`; dm_control refuses.
+  num_envs: 1
+  action_mode: plan
+  # Env steps between replans. 1 is MPC as usual -- plan, take the first action, replan from
+  # the state that produced. Above 1 the rest of the plan is executed open-loop before the next
+  # one is made, which is what a controller that cannot replan every step actually does; the
+  # action prior is shifted by the same amount, so the next plan is warm-started from where the
+  # executed segment left off rather than from one step on.
+  replan_every: 1
+  device: ${device}
+  save_video: True
+  seed: ${seed}
+  # The episode time limit this evaluator scores under, replacing the task's registered one
+  # (50 for PushCube/PlaceSphere/LiftPegUpright, 100 for PegInsertionSide-v1). In the task's own
+  # units -- primitive env steps on ManiSkill -- so an episode is `max_episode_steps / frameskip`
+  # of the steps the loop below takes, and this number does not move when frameskip does.
+  # `null` keeps whatever the task registers.
+  max_episode_steps: 50
+  num_episodes: 50

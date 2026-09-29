@@ -1,0 +1,14 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.loss_evaluator.LossEvaluator
+
+loss_functions: ${loss_functions}
+loss_function_weights: ${loss_function_weights}
+
+task: ${task}
+
+cfg:
+  train_fraction: 0.5
+  batch_size: 16
+  fraction: 0.1
+  device: ${device}

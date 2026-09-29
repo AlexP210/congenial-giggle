@@ -1,0 +1,65 @@
+# stochastic student configuration
+
+_target_: s2p.tasks.maniskill_task.get_or_create
+
+cfg:
+  task_name: PlaceSphere-v1.1
+
+  data_path: null #${data_dir}/maniskill/${.task_name}/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino.mmap.frac0.01.h5
+  json_path: null #${data_dir}/maniskill/${.task_name}/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino.mmap.frac0.01.json
+  local_dir: ${local_dir}
+  copy_dataset_to_local_dir: true
+
+  observation_mode: rgb
+  camera_view: wrist
+  # The lighting condition the scene is rendered under: a preset name from
+  # `custom_maniskill_tasks.LIGHTING_PRESETS` ("default" is the stock lighting every dataset
+  # here was recorded with, so it is what a checkpoint is calibrated for; "dim", "bright",
+  # "warm", "cool", "side" and "shadows" are named shifts away from it, the exposure and colour
+  # ones also as "very-<preset>", and "random" draws one condition per parallel env for
+  # training-time randomization), or a "+"-joined stack of those shift names
+  # (e.g. "very-dim+very-warm+side"). Only affects the env this task builds -- an offline
+  # dataset carries whatever it was recorded under.
+  lighting: default
+  control_mode: pd_ee_delta_pos
+  num_envs: 1
+
+  num_frames: 3
+  frame_skip: 1
+  load: False
+  load_device: null
+  # cpu, not ${device}: a forked DataLoader worker cannot touch the parent's CUDA context,
+  # so a dataset that places its own samples on the GPU forces num_workers=0 -- and this
+  # dataset is memmap views, where that means the training step blocks on page faults with
+  # the GPU idle. The trainer and the loss evaluator do the one transfer instead.
+  batch_device: cpu
+  # The physics backend. `null` is ManiSkill's own choice, which is physx_cpu at one env and
+  # physx_cuda above it -- so a `num_envs > 1` component gets the GPU sim it needs while a
+  # single-env one keeps stepping exactly the backend this baseline was reproduced on (the two
+  # are not numerically identical; the CPU/GPU sim gap is worth a few points of success rate).
+  # Set it explicitly (`physx_cuda:0`) to hold every component to one backend. Either way
+  # `custom_maniskill_tasks.backend_kwargs` pins the device index: an index-less `physx_cuda`
+  # lets sapien put the renderer on a different GPU than torch is on, which dies with a
+  # pose-buffer/renderer device mismatch.
+  sim_backend: null
+  horizon: ${data_horizon}
+  dataset_structure: {
+    obs: {
+      rgb: obs/sensor_data/hand_camera/rgb,
+      dino_patch_features: obs/sensor_data/hand_camera/dino_patch_features,
+      tcp_pose: obs/extra/tcp_pose,
+      sphere_pose: env_states/actors/sphere,
+      bin_pose: env_states/actors/bin,
+      qpos: obs/agent/qpos,
+      qvel: obs/agent/qvel
+    },
+    action: actions,
+    reward: rewards,
+    terminated: terminated,
+    truncated: truncated,
+    state: {
+      sphere_pose: env_states/actors/sphere,
+      bin_pose: env_states/actors/bin,
+    }
+  }
+  visual_observation_resolution: 224

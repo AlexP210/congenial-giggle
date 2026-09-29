@@ -1,0 +1,13 @@
+# stochastic student configuration
+
+_target_: s2p.models.linear_student_encoder.LinearStudentEncoder
+
+task: ${task}
+teacher: ${teacher_encoder}
+
+cfg:
+  ema_decay: 0.99
+  latent_dim: ${latent_dimension}
+  device: ${device}
+  checkpoint: null
+  freeze: false

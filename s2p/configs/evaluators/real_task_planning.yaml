@@ -1,0 +1,36 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.real_task_evaluator.RealTaskEvaluator
+
+task: ${task}
+
+cfg:
+  # Episodes run `num_envs` at a time. Each env is an independent episode, so this only
+  # changes how long the evaluation takes, not what it measures -- in particular not the plan
+  # budget, which the latency evaluators deliberately measure at one env.
+  num_envs: 1
+  action_mode: plan
+  # What the plan costs in env steps. `null` measures it: `PlanLatencyEvaluator` times a plan
+  # and divides by the task's control interval, so the budget is this machine's. A number
+  # overrides that, which is how a fixed budget is held across machines for a comparison.
+  steps_needed_to_plan: null
+  # What the agent does while the planner is thinking, since in a real-time env those steps
+  # still pass: `wait` holds a zero action, `finish_plan_then_wait` runs out the previous plan
+  # first, `finish_plan_then_repeat` runs it out and then repeats its last action.
+  interim_behaviour: wait
+  # Env steps between replans. 1 is MPC as usual -- plan, take the first action, replan from
+  # the state that produced. Above 1 the rest of the plan is executed open-loop before the next
+  # one is made, which is what a controller that cannot replan every step actually does; the
+  # action prior is shifted by the same amount, so the next plan is warm-started from where the
+  # executed segment left off rather than from one step on.
+  replan_every: 1
+  device: ${device}
+  save_video: True
+  seed: ${seed}
+  # The episode time limit this evaluator scores under, replacing the task's registered one
+  # (50 for PushCube/PlaceSphere/LiftPegUpright, 100 for PegInsertionSide-v1). In the task's own
+  # units -- primitive env steps on ManiSkill -- so an episode is `max_episode_steps / frameskip`
+  # of the steps the loop below takes, and this number does not move when frameskip does.
+  # `null` keeps whatever the task registers.
+  max_episode_steps: 50
+  num_episodes: 50

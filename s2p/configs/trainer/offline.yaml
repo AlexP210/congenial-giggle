@@ -1,0 +1,18 @@
+# offline trainer configuration
+
+_target_: s2p.trainers.offline_trainer.OfflineTrainer
+
+task: ${task}
+loss_functions: ${loss_functions}
+loss_function_weights: ${loss_function_weights}
+
+cfg:
+  device: ${device}
+  batch_size: 512
+  # 0 loads every sample in the training process, which on a memmapped dataset means the
+  # step is spent blocked on page faults with the GPU idle. Keep this below the job's
+  # --cpus-per-gpu, leaving a core for the training process itself.
+  num_workers: 6
+  # 2, not 4: a batch here is hundreds of MB, and num_workers * prefetch_factor of them
+  # sit in flight at once.
+  prefetch_factor: 2

@@ -1,0 +1,29 @@
+# Frozen reward head over a DINO-Bisim latent, for the ManiSkill PushCube task.
+#
+# Not DINO-Bisim-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has -- the head reads its token count and width off a probe encode, so the compact
+# bisimulation token needs no config change. What makes this config DINO-Bisim's is the
+# checkpoint below, which was fitted against that world model's latent and is meaningless over
+# any other.
+#
+# Written by train_dino_bisim_reward_push_cube.yaml. `freeze: true` also means `save_to_file`
+# records a reference to that checkpoint rather than copying its weights.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  checkpoint: ${output_dir}/checkpoints/DINOBisimReward_push_cube_CorrectData-20260905_054152/loss/best_total_loss/reward.pt
+  freeze: true

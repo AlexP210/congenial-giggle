@@ -1,0 +1,37 @@
+# Metrics on the data a run *started* with -- several of them, over one snapshot.
+#
+# The multi-metric form of the `initial_data_*.yaml` configs. `InitialDataWrapper` captures the
+# first dataset it is handed -- during online training the replay buffer, i.e. whatever seeded the
+# run -- and scores that same snapshot for the rest of the run, so every change in the numbers is
+# the model rather than the moving data. See `initial_data_wrapper.py` for how to read them
+# against the live metrics.
+#
+# The evaluators are deliberately not listed here: they are what a run config chooses, and
+# composing this without naming one should fail rather than hold a snapshot for nobody.
+#
+#   - evaluators@evaluators.initial_data: initial_data
+#   - evaluators@evaluators.initial_data.evaluators.loss: loss
+#   - evaluators@evaluators.initial_data.evaluators.rollout_error: rollout_error
+#
+# Their keys are then prefixed with the names composed into (`initial_data/loss/total_loss`).
+#
+# One wrapper rather than one per metric for a sharper reason than cost: the snapshot is resident
+# for the whole run, and `capture` samples its windows at random, so two wrappers would hold two
+# snapshots of *different* windows and their numbers would not be about the same data.
+#
+# There is no `evaluation_interval` here: `TrainingRunner` on this branch runs every evaluator on
+# its own `cfg.evaluation_interval`, so the wrapper is called as often as everything else. The
+# first of those calls takes the snapshot and reports nothing.
+
+_target_: s2p.evaluators.initial_data_wrapper.InitialDataWrapper
+
+task: ${task}
+
+cfg:
+  # What to capture on the first call: `fraction` of the dataset, capped at `max_windows`.
+  # The snapshot is resident for the whole run -- ~1.8 MB per window at this project's PushCube
+  # settings (horizon 4, 3 stacked frames, 224x224 uint8), i.e. ~115 MB at 64.
+  fraction: 1.0
+  max_windows: 64
+  # Where the snapshot lives. cpu keeps a run's worth of frames off the training device.
+  storage_device: cpu

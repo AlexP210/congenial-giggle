@@ -1,0 +1,12 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.rollout_error_evaluator.RolloutErrorEvaluator
+
+task: ${task}
+
+cfg:
+  horizon: ${loss_horizon}
+  num_trajectories: 100 # You will get horizon*num_trajectories points on the plot
+  batch_size: 16
+  max_dynamics_error: 0.1
+  device: ${device}

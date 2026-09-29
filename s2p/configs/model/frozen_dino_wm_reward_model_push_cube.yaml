@@ -1,0 +1,40 @@
+# Frozen reward head over a DINO-WM latent, for the ManiSkill PushCube task.
+#
+# Not DINO-WM-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has. What makes this config DINO-WM's is the checkpoint below -- the head was fitted against
+# that world model's latent, and is meaningless over any other.
+#
+# Written by train_dino_wm_reward_push_cube.yaml. `freeze: true` also means `save_to_file`
+# records a reference to that checkpoint rather than copying its weights.
+#
+# INCREMENT 3 (the 72h run). Fitted on increment 3's `model_best.pth` (epoch 22, val 0.0074)
+# in 2026-09-08/21-55-59_push_cube -- the 72h best. `frozen_dino_wm_push_cube.yaml` must name
+# that folder AND `resume_checkpoint: model_best.pth`, since epoch 24 is that run's last
+# epoch but not its best.
+#
+# The increment-2 (48h) head this replaced is kept alongside as
+# `frozen_dino_wm_reward_model_push_cube_inc2.yaml`; pair each only with the world-model
+# config of the same increment.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  # Round 2 of 2: a 4h pass warm-started from the round-1 head (BestCkpt-20260914_102740) on
+  # the same world model (epoch 22), ~8h / ~170K steps in total. The Adam moments and step
+  # counter were reset, not resumed. Read from inc3_runs/, the copy fetch_inc3_runs.sh takes
+  # from Nibi.
+  checkpoint: ${output_dir}/../inc3_runs/reward_heads/DINOWMReward_push_cube_CorrectData_BestCkpt_Cont-20260924_023156/loss/best_total_loss/reward.pt
+  freeze: true

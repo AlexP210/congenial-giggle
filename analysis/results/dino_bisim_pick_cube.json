@@ -1,0 +1,3452 @@
+{
+  "num_samples=64,num_elites=8,horizon=1,iterations=1": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 1,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.1851363182067871,
+          0.17721939086914062,
+          0.1772756576538086,
+          0.17751359939575195,
+          0.17721009254455566
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 40180026896.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4146936832,
+          4146937856,
+          4146937856,
+          4146937856,
+          4146937856
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=1,iterations=1": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 1,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.43036770820617676,
+          0.34664392471313477,
+          0.3466353416442871,
+          0.34669923782348633,
+          0.34647130966186523
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 40180026896.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7799244800,
+          7799245824,
+          7799245824,
+          7799245824,
+          7799245824
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=1,iterations=1": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 1,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.6980113983154297,
+          0.6816601753234863,
+          0.6859393119812012,
+          0.6832878589630127,
+          0.6823751926422119
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 40180026896.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15104649728,
+          15104650752,
+          15104650752,
+          15104650752,
+          15104650752
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=1,iterations=2": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 1,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.37017297744750977,
+          0.3467447757720947,
+          0.3462183475494385,
+          0.34638047218322754,
+          0.3464484214782715
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4146942464,
+          4146943488,
+          4146943488,
+          4146943488,
+          4146943488
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=1,iterations=2": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 1,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.6904981136322021,
+          0.6808638572692871,
+          0.6807751655578613,
+          0.6818819046020508,
+          0.6802875995635986
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7799250432,
+          7799251456,
+          7799251456,
+          7799251456,
+          7799251456
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=1,iterations=2": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 1,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3757576942443848,
+          1.3616018295288086,
+          1.360300064086914,
+          1.360236644744873,
+          1.360375165939331
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15104656384,
+          15104657408,
+          15104657408,
+          15104657408,
+          15104657408
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=1,iterations=3": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 1,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.5388429164886475,
+          0.5143396854400635,
+          0.514594554901123,
+          0.5144801139831543,
+          0.5151731967926025
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4146942976,
+          4146944000,
+          4146944000,
+          4146944000,
+          4146944000
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=1,iterations=3": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 1,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.0206656455993652,
+          1.011974811553955,
+          1.0114879608154297,
+          1.0117080211639404,
+          1.0114943981170654
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7799250944,
+          7799251968,
+          7799251968,
+          7799251968,
+          7799251968
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=1,iterations=3": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 1,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.0419504642486572,
+          2.0325262546539307,
+          2.033949375152588,
+          2.0276999473571777,
+          2.032954216003418
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15104656896,
+          15104657920,
+          15104657920,
+          15104657920,
+          15104657920
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=1,iterations=4": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 1,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.710141658782959,
+          0.6834161281585693,
+          0.6844527721405029,
+          0.6840496063232422,
+          0.6838009357452393
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4146942976,
+          4146944000,
+          4146944000,
+          4146944000,
+          4146944000
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=1,iterations=4": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 1,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3647892475128174,
+          1.3542523384094238,
+          1.3572883605957031,
+          1.358367919921875,
+          1.3567028045654297
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7799250944,
+          7799251968,
+          7799251968,
+          7799251968,
+          7799251968
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=1,iterations=4": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 1,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.7119898796081543,
+          2.697173595428467,
+          2.697477102279663,
+          2.6965389251708984,
+          2.696465253829956
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15104656896,
+          15104657920,
+          15104657920,
+          15104657920,
+          15104657920
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=1,iterations=5": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 1,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.8789632320404053,
+          0.8542230129241943,
+          0.8517582416534424,
+          0.8538434505462646,
+          0.8529138565063477
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4146942976,
+          4146944000,
+          4146944000,
+          4146944000,
+          4146944000
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=1,iterations=5": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 1,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.692107915878296,
+          1.6815409660339355,
+          1.681791067123413,
+          1.6823792457580566,
+          1.681464672088623
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7799250944,
+          7799251968,
+          7799251968,
+          7799251968,
+          7799251968
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=1,iterations=5": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 1,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.4062843322753906,
+          3.3891377449035645,
+          3.3884246349334717,
+          3.3838961124420166,
+          3.388718605041504
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15104656896,
+          15104657920,
+          15104657920,
+          15104657920,
+          15104657920
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=2,iterations=1": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 2,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.3702704906463623,
+          0.3451077938079834,
+          0.3459439277648926,
+          0.3457527160644531,
+          0.3466935157775879
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159584768,
+          4159585792,
+          4159585792,
+          4159585792,
+          4159585792
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=2,iterations=1": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 2,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.6871819496154785,
+          0.6771061420440674,
+          0.6785829067230225,
+          0.6780846118927002,
+          0.6773788928985596
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824540160,
+          7824541184,
+          7824541184,
+          7824541184,
+          7824541184
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=2,iterations=1": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 2,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3720834255218506,
+          1.3597826957702637,
+          1.3597383499145508,
+          1.3633716106414795,
+          1.3607568740844727
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 54258465508.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155240448,
+          15155241472,
+          15155241472,
+          15155241472,
+          15155241472
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=2,iterations=2": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 2,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.7082610130310059,
+          0.6862771511077881,
+          0.6854784488677979,
+          0.6856639385223389,
+          0.685591459274292
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159590400,
+          4159591424,
+          4159591424,
+          4159591424,
+          4159591424
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=2,iterations=2": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 2,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3563227653503418,
+          1.3466548919677734,
+          1.3475162982940674,
+          1.347142219543457,
+          1.3475444316864014
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824545792,
+          7824546816,
+          7824546816,
+          7824546816,
+          7824546816
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=2,iterations=2": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 2,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.725276231765747,
+          2.7117867469787598,
+          2.711374282836914,
+          2.7115864753723145,
+          2.7123100757598877
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155247616,
+          15155248640,
+          15155248640,
+          15155248640,
+          15155248640
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=2,iterations=3": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 2,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.0474469661712646,
+          1.0238189697265625,
+          1.024914026260376,
+          1.020752191543579,
+          1.02347993850708
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159590912,
+          4159591936,
+          4159591936,
+          4159591936,
+          4159591936
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=2,iterations=3": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 2,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.035928726196289,
+          2.026409149169922,
+          2.0285520553588867,
+          2.029510021209717,
+          2.027627468109131
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824546304,
+          7824547328,
+          7824547328,
+          7824547328,
+          7824547328
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=2,iterations=3": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 2,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          4.078279972076416,
+          4.066769599914551,
+          4.062893867492676,
+          4.0663957595825195,
+          4.064801216125488
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155248128,
+          15155249152,
+          15155249152,
+          15155249152,
+          15155249152
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=2,iterations=4": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 2,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3857076168060303,
+          1.360992670059204,
+          1.3625566959381104,
+          1.3602700233459473,
+          1.361830472946167
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159590912,
+          4159591936,
+          4159591936,
+          4159591936,
+          4159591936
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=2,iterations=4": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 2,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.7130115032196045,
+          2.7063982486724854,
+          2.701031446456909,
+          2.703627347946167,
+          2.701725959777832
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824546304,
+          7824547328,
+          7824547328,
+          7824547328,
+          7824547328
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=2,iterations=4": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 2,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          5.420042037963867,
+          5.417731285095215,
+          5.411766052246094,
+          5.401447296142578,
+          5.403151512145996
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155248128,
+          15155249152,
+          15155249152,
+          15155249152,
+          15155249152
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=2,iterations=5": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 2,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.722318410873413,
+          1.698084831237793,
+          1.697953224182129,
+          1.7005391120910645,
+          1.7012462615966797
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159590912,
+          4159591936,
+          4159591936,
+          4159591936,
+          4159591936
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=2,iterations=5": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 2,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.3669421672821045,
+          3.3575258255004883,
+          3.3580515384674072,
+          3.35740327835083,
+          3.357008218765259
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824546304,
+          7824547328,
+          7824547328,
+          7824547328,
+          7824547328
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=2,iterations=5": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 2,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          6.768155097961426,
+          6.756298065185547,
+          6.761467933654785,
+          6.767128944396973,
+          6.756947040557861
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155248128,
+          15155249152,
+          15155249152,
+          15155249152,
+          15155249152
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=3,iterations=1": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 3,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.5419120788574219,
+          0.5157594680786133,
+          0.5150785446166992,
+          0.5148634910583496,
+          0.514406681060791
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159587840,
+          4159588864,
+          4159588864,
+          4159588864,
+          4159588864
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=3,iterations=1": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 3,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.031003475189209,
+          1.0202429294586182,
+          1.0188956260681152,
+          1.0212550163269043,
+          1.0203757286071777
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824546304,
+          7824547328,
+          7824547328,
+          7824547328,
+          7824547328
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=3,iterations=1": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 3,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.0411577224731445,
+          2.0285868644714355,
+          2.0250284671783447,
+          2.026998281478882,
+          2.028355598449707
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 68336904120.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155252736,
+          15155253760,
+          15155253760,
+          15155253760,
+          15155253760
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=3,iterations=2": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 3,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.0479724407196045,
+          1.024888038635254,
+          1.0238251686096191,
+          1.0252866744995117,
+          1.0247588157653809
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159593472,
+          4159594496,
+          4159594496,
+          4159594496,
+          4159594496
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=3,iterations=2": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 3,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.0269505977630615,
+          2.0172853469848633,
+          2.0193755626678467,
+          2.0189967155456543,
+          2.017190933227539
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824552448,
+          7824553472,
+          7824553472,
+          7824553472,
+          7824553472
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=3,iterations=2": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 3,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          4.0773186683654785,
+          4.060769557952881,
+          4.059122085571289,
+          4.066507816314697,
+          4.063024520874023
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 110572219956.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155260416,
+          15155261440,
+          15155261440,
+          15155261440,
+          15155261440
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=3,iterations=3": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 3,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.5537910461425781,
+          1.533632516860962,
+          1.5301353931427002,
+          1.5311987400054932,
+          1.5309257507324219
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 152807535792.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159593984,
+          4159595008,
+          4159595008,
+          4159595008,
+          4159595008
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=3,iterations=3": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 3,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.0535366535186768,
+          3.0390515327453613,
+          3.040083408355713,
+          3.0298867225646973,
+          3.040104866027832
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 152807535792.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824552960,
+          7824553984,
+          7824553984,
+          7824553984,
+          7824553984
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=3,iterations=3": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 3,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          6.119026184082031,
+          6.104065895080566,
+          6.100153923034668,
+          6.087370872497559,
+          6.09200382232666
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 152807535792.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155260928,
+          15155261952,
+          15155261952,
+          15155261952,
+          15155261952
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=3,iterations=4": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 3,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.0642945766448975,
+          2.039000988006592,
+          2.039069652557373,
+          2.038242816925049,
+          2.0374796390533447
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159593984,
+          4159595008,
+          4159595008,
+          4159595008,
+          4159595008
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=3,iterations=4": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 3,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          4.061314582824707,
+          4.04747200012207,
+          4.0426483154296875,
+          4.047178268432617,
+          4.046757698059082
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824552960,
+          7824553984,
+          7824553984,
+          7824553984,
+          7824553984
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=3,iterations=4": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 3,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          8.12315559387207,
+          8.122148513793945,
+          8.114144325256348,
+          8.111531257629395,
+          8.113216400146484
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155260928,
+          15155261952,
+          15155261952,
+          15155261952,
+          15155261952
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=3,iterations=5": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 3,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.5752997398376465,
+          2.5513432025909424,
+          2.5506081581115723,
+          2.5508933067321777,
+          2.5513389110565186
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159593984,
+          4159595008,
+          4159595008,
+          4159595008,
+          4159595008
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=3,iterations=5": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 3,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          5.049779891967773,
+          5.038175582885742,
+          5.040027618408203,
+          5.038412094116211,
+          5.039549827575684
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824552960,
+          7824553984,
+          7824553984,
+          7824553984,
+          7824553984
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=3,iterations=5": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 3,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          10.11583423614502,
+          10.10097599029541,
+          10.10006046295166,
+          10.104534149169922,
+          10.108532905578613
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155260928,
+          15155261952,
+          15155261952,
+          15155261952,
+          15155261952
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=4,iterations=1": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 4,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.7141194343566895,
+          0.6837301254272461,
+          0.6847126483917236,
+          0.683478832244873,
+          0.6839799880981445
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159590912,
+          4159591936,
+          4159591936,
+          4159591936,
+          4159591936
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=4,iterations=1": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 4,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3636629581451416,
+          1.3578464984893799,
+          1.3605475425720215,
+          1.3559999465942383,
+          1.3582653999328613
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824552448,
+          7824553472,
+          7824553472,
+          7824553472,
+          7824553472
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=4,iterations=1": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 4,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.7134008407592773,
+          2.7024455070495605,
+          2.6995177268981934,
+          2.6982789039611816,
+          2.701399087905884
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 82415342732.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155265024,
+          15155266048,
+          15155266048,
+          15155266048,
+          15155266048
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=4,iterations=2": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 4,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.3867580890655518,
+          1.3634753227233887,
+          1.364130973815918,
+          1.3629603385925293,
+          1.3645918369293213
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159596544,
+          4159597568,
+          4159597568,
+          4159597568,
+          4159597568
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=4,iterations=2": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 4,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.696692943572998,
+          2.6868278980255127,
+          2.6893627643585205,
+          2.688525676727295,
+          2.6878957748413086
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824558592,
+          7824559616,
+          7824559616,
+          7824559616,
+          7824559616
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=4,iterations=2": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 4,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          5.420094013214111,
+          5.420022964477539,
+          5.413999557495117,
+          5.402183532714844,
+          5.4157609939575195
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 138729097180.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155273216,
+          15155274240,
+          15155274240,
+          15155274240,
+          15155274240
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=4,iterations=3": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 4,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.0620315074920654,
+          2.040208339691162,
+          2.035883665084839,
+          2.0379583835601807,
+          2.0379528999328613
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159597056,
+          4159598080,
+          4159598080,
+          4159598080,
+          4159598080
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=4,iterations=3": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 4,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          4.057183265686035,
+          4.04536247253418,
+          4.051593780517578,
+          4.044458389282227,
+          4.045718669891357
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824559104,
+          7824560128,
+          7824560128,
+          7824560128,
+          7824560128
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=4,iterations=3": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 4,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          8.134772300720215,
+          8.11870002746582,
+          8.112805366516113,
+          8.12152099609375,
+          8.116889953613281
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 195042851628.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155273728,
+          15155274752,
+          15155274752,
+          15155274752,
+          15155274752
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=4,iterations=4": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 4,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.7400119304656982,
+          2.7175803184509277,
+          2.717026948928833,
+          2.7154011726379395,
+          2.7178971767425537
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 251356606076.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159597056,
+          4159598080,
+          4159598080,
+          4159598080,
+          4159598080
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=4,iterations=4": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 4,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          5.407163143157959,
+          5.3896484375,
+          5.391201019287109,
+          5.389233589172363,
+          5.394895553588867
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 251356606076.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824559104,
+          7824560128,
+          7824560128,
+          7824560128,
+          7824560128
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=4,iterations=4": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 4,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          10.83976936340332,
+          10.83692741394043,
+          10.837946891784668,
+          10.830004692077637,
+          10.81127643585205
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 251356606076.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155273728,
+          15155274752,
+          15155274752,
+          15155274752,
+          15155274752
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=4,iterations=5": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 4,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.4212467670440674,
+          3.3969979286193848,
+          3.3957114219665527,
+          3.395317316055298,
+          3.3956358432769775
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159597056,
+          4159598080,
+          4159598080,
+          4159598080,
+          4159598080
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=4,iterations=5": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 4,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          6.716416835784912,
+          6.708590984344482,
+          6.707468032836914,
+          6.707984924316406,
+          6.70836067199707
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824559104,
+          7824560128,
+          7824560128,
+          7824560128,
+          7824560128
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=4,iterations=5": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 4,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          13.530325889587402,
+          13.509835243225098,
+          13.519207954406738,
+          13.511353492736816,
+          13.51795768737793
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155273728,
+          15155274752,
+          15155274752,
+          15155274752,
+          15155274752
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=5,iterations=1": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 5,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          0.8798420429229736,
+          0.8550763130187988,
+          0.8553428649902344,
+          0.8556897640228271,
+          0.8554766178131104
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159593984,
+          4159595008,
+          4159595008,
+          4159595008,
+          4159595008
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=5,iterations=1": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 5,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.6972575187683105,
+          1.6943707466125488,
+          1.6867611408233643,
+          1.6924121379852295,
+          1.6879258155822754
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824558592,
+          7824559616,
+          7824559616,
+          7824559616,
+          7824559616
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=5,iterations=1": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 5,
+      "iterations": 1
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.3975822925567627,
+          3.383514165878296,
+          3.387559413909912,
+          3.3869967460632324,
+          3.3850979804992676
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 96493781344.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155277312,
+          15155278336,
+          15155278336,
+          15155278336,
+          15155278336
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=5,iterations=2": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 5,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          1.7191331386566162,
+          1.6913087368011475,
+          1.6928799152374268,
+          1.694610834121704,
+          1.6917190551757812
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159600128,
+          4159601152,
+          4159601152,
+          4159601152,
+          4159601152
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=5,iterations=2": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 5,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.3673644065856934,
+          3.3576104640960693,
+          3.358379364013672,
+          3.357355833053589,
+          3.3585307598114014
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824565248,
+          7824566272,
+          7824566272,
+          7824566272,
+          7824566272
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=5,iterations=2": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 5,
+      "iterations": 2
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          6.832553386688232,
+          6.746272087097168,
+          6.753594398498535,
+          6.750016212463379,
+          6.753740310668945
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 166885974404.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155286016,
+          15155287040,
+          15155287040,
+          15155287040,
+          15155287040
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=5,iterations=3": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 5,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          2.5720694065093994,
+          2.5437142848968506,
+          2.5454981327056885,
+          2.5460903644561768,
+          2.545994520187378
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159600640,
+          4159601664,
+          4159601664,
+          4159601664,
+          4159601664
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=5,iterations=3": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 5,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          5.105718612670898,
+          5.096631050109863,
+          5.096645355224609,
+          5.096549034118652,
+          5.0973029136657715
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824565760,
+          7824566784,
+          7824566784,
+          7824566784,
+          7824566784
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=5,iterations=3": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 5,
+      "iterations": 3
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          10.166625022888184,
+          10.149299621582031,
+          10.162359237670898,
+          10.145968437194824,
+          10.149262428283691
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 237278167464.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155286528,
+          15155287552,
+          15155287552,
+          15155287552,
+          15155287552
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=5,iterations=4": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 5,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          3.424431800842285,
+          3.3987436294555664,
+          3.397465229034424,
+          3.399390935897827,
+          3.397942543029785
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159600640,
+          4159601664,
+          4159601664,
+          4159601664,
+          4159601664
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=5,iterations=4": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 5,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          6.755824089050293,
+          6.749366760253906,
+          6.748439788818359,
+          6.741967678070068,
+          6.750945091247559
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824565760,
+          7824566784,
+          7824566784,
+          7824566784,
+          7824566784
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=5,iterations=4": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 5,
+      "iterations": 4
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          13.592743873596191,
+          13.578279495239258,
+          13.58079719543457,
+          13.561768531799316,
+          13.56639575958252
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 307670360524.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155286528,
+          15155287552,
+          15155287552,
+          15155287552,
+          15155287552
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=64,num_elites=8,horizon=5,iterations=5": {
+    "planner": {
+      "num_samples": 64,
+      "num_elites": 8,
+      "horizon": 5,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          4.272125244140625,
+          4.2486371994018555,
+          4.24870491027832,
+          4.248578071594238,
+          4.248723983764648
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 378062553584.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          4159600640,
+          4159601664,
+          4159601664,
+          4159601664,
+          4159601664
+        ],
+        "peak_reserved_bytes": [
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040,
+          4236247040
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=128,num_elites=16,horizon=5,iterations=5": {
+    "planner": {
+      "num_samples": 128,
+      "num_elites": 16,
+      "horizon": 5,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          8.411858558654785,
+          8.395936012268066,
+          8.39178466796875,
+          8.393492698669434,
+          8.397042274475098
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 378062553584.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          7824565760,
+          7824566784,
+          7824566784,
+          7824566784,
+          7824566784
+        ],
+        "peak_reserved_bytes": [
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472,
+          7939817472
+        ]
+      }
+    ],
+    "success": []
+  },
+  "num_samples=256,num_elites=32,horizon=5,iterations=5": {
+    "planner": {
+      "num_samples": 256,
+      "num_elites": 32,
+      "horizon": 5,
+      "iterations": 5
+    },
+    "latency": [
+      {
+        "gpu": "NVIDIA L40S",
+        "latencies": [
+          16.841228485107422,
+          16.82875633239746,
+          16.837173461914062,
+          16.831525802612305,
+          16.831825256347656
+        ]
+      }
+    ],
+    "flops": [
+      {
+        "flops": 378062553584.0
+      }
+    ],
+    "memory": [
+      {
+        "gpu": "NVIDIA L40S",
+        "baseline_allocated_bytes": 488160768,
+        "peak_allocated_bytes": [
+          15155286528,
+          15155287552,
+          15155287552,
+          15155287552,
+          15155287552
+        ],
+        "peak_reserved_bytes": [
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816,
+          15325986816
+        ]
+      }
+    ],
+    "success": []
+  }
+}

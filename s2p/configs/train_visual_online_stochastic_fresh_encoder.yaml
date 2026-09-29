@@ -1,0 +1,8 @@
+# Ablation of `train_visual_online_stochastic`: the pretrained DINOv3 vision encoder is
+# replaced by the same architecture randomly initialized and trained by this run. Everything
+# else is inherited from the base unchanged, so the encoder is the only difference.
+
+defaults:
+  - train_visual_online_stochastic
+  - override model@vision_encoder: fresh_dinov3_vits_patch_encoder
+  - _self_

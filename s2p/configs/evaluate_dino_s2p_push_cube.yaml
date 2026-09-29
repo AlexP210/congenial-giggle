@@ -1,0 +1,104 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+#
+# DINO-WM's latent and dynamics, with S2P's reward and value in place of the bespoke reward head
+# of `evaluate_dino_wm_push_cube.yaml`. DINOS2PWorldModel hands S2P only the visual tokens of the
+# DINO-WM window, so the S2P run named by `s2p_checkpoint_folder` must have been trained with a
+# vision-only teacher (the passthrough encoder below as `teacher_encoder`), not with
+# `vision_proprioception_joint_encoder`. The model fails at construction otherwise.
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_push_cube
+
+  - model@dino_wm: frozen_dino_wm_push_cube
+
+  # S2P, vision-only. Same model configs a S2P training run composes; the checkpoints are
+  # pointed at `s2p_checkpoint_folder` below.
+  - model@teacher_encoder: frozen_dinov3_vits_passthrough_patch_encoder
+  - model@student_encoder: fresh_student_encoder_deterministic_cap
+  - model@s2p_encoder: teacher_student_encoder
+  - model@s2p_reward: fresh_reward_deterministic_mlp
+  - model@s2p_value: fresh_tdmpc2
+
+  - model@dino_s2p: dino_s2p_world_model
+
+  # S2P's value is a bootstrapped terminal value, so unlike DINO-WM's bespoke head this plans
+  # with `use_value: True`.
+  - planner: mppi_with_value
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+  - evaluators@evaluators.planner_convergence: planner_convergence
+
+  - _self_
+
+data_horizon: 2
+
+encoder: ${dino_s2p}
+dynamics: ${dino_s2p}
+reward: ${dino_s2p}
+value: ${dino_s2p}
+policy: null
+
+# Agent checkpoint folder of the vision-only S2P run: encoder.pt, reward.pt, value.pt.
+s2p_checkpoint_folder: ???
+
+s2p_encoder:
+  cfg:
+    freeze: true
+    checkpoint: ${s2p_checkpoint_folder}/encoder.pt
+
+s2p_reward:
+  cfg:
+    freeze: true
+    checkpoint: ${s2p_checkpoint_folder}/reward.pt
+
+s2p_value:
+  cfg:
+    freeze: true
+    tdmpc2_cfg:
+      checkpoint: ${s2p_checkpoint_folder}/value.pt
+
+# Must match the S2P run's.
+latent_dimension: 512
+
+task:
+  cfg:
+    sim_backend: physx_${device}
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 1
+      num_episodes: 5
+
+  real_task_planning:
+    cfg:
+      num_envs: 1
+      num_episodes: 5
+
+
+planner:
+  cfg:
+    # Sized for DINO-WM's ~238k-float latent, as in evaluate_dino_wm_push_cube.yaml.
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0
+    # Left at mppi_with_value's 0.95, the discount S2P's value is bootstrapped under in training.
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

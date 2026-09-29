@@ -1,0 +1,37 @@
+# The loss on the data the run started with, over a snapshot that never changes.
+#
+# `InitialDataWrapper` captures the first dataset it is handed and feeds that to a `LossEvaluator`
+# for the rest of the run, so every change in the number is the model rather than the data. During
+# online training the dataset it captures is the replay buffer, i.e. whatever seeded the run.
+#
+# One evaluator over that snapshot. `initial_data.yaml` is the same wrapper taking several,
+# which is what a run wanting more than one metric on the early data should compose instead --
+# two of these wrappers would hold two snapshots, of different windows.
+
+defaults:
+  # The wrapped evaluators, composed from `loss.yaml` rather than restated, so the two cannot
+  # drift apart. `fraction` is overridden below. Several may be listed -- they share the one
+  # snapshot, and their keys are then prefixed with the name each is composed under. The mapping
+  # form rather than a list because a list element is not addressable as a package here.
+  - /evaluators@evaluators.loss: loss
+
+_target_: s2p.evaluators.initial_data_wrapper.InitialDataWrapper
+
+task: ${task}
+
+evaluators:
+  loss:
+    cfg:
+      # The whole snapshot, every call. `loss.yaml` subsamples because its dataset is large; here
+      # the wrapper has already subsampled, and resampling again would add noise of its own to a
+      # metric whose entire job is to be compared against itself over time.
+      fraction: 1.0
+
+cfg:
+  # What to capture on the first call: `fraction` of the dataset, capped at `max_windows`.
+  # The snapshot is resident for the whole run -- ~1.8 MB per window at this project's PushCube
+  # settings (horizon 4, 3 stacked frames, 224x224 uint8), i.e. ~115 MB at 64.
+  fraction: 1.0
+  max_windows: 64
+  # Where the snapshot lives. cpu keeps a run's worth of frames off the training device.
+  storage_device: cpu

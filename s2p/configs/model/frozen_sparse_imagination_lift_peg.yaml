@@ -1,0 +1,199 @@
+# Frozen Sparse Imagination teacher configuration -- increment 3 (the 72h run).
+
+_target_: s2p.models.sparse_imagination_world_model.get_or_create
+
+# `cfg.sparse_imagination_cfg` below is the repo's own train config, and it is full of
+# `_target_`s (model, encoder, predictor, decoder, ...) that Trainer instantiates itself, in
+# order, once it knows the dataset dimensions. Hydra instantiates recursively by default and
+# would build them here instead — it gets as far as `sparse_imagination_cfg.model` and fails
+# with "VWorldModel.__init__() missing 5 required positional arguments". `_recursive_` is
+# only honoured as "do not instantiate my kwargs" on a node that has a `_target_`, so it has
+# to sit here rather than on `sparse_imagination_cfg`; the cost is that `task` below arrives
+# as a config too, which SparseImaginationWorldModel.__init__ rebuilds (get_or_create
+# memoizes, so it is the same task object every other model is handed).
+_recursive_: false
+
+task: ${task}
+
+cfg:
+  freeze: true
+  device: ${device}
+  # The task's dataset ships DINOv3 patch features precomputed with this very backbone
+  # (196x384, dinov3_vits16), so encode_visual short-circuits to them and offline batches
+  # never run the ViT. The kept-patch subset is taken after that either way, so the two
+  # paths select the same tokens. Leave unset only to force the live visual path.
+  dino_feature_key: dino_patch_features
+  # Order matters: this is concatenated in sequence and must reproduce liftpeg_dset's
+  # PROPRIO_KEYS = [obs/agent/qpos, obs/agent/qvel, obs/extra/tcp_pose] (9+9+7=25), which
+  # is what this model's proprio encoder was trained on.
+  proprio_keys: [qpos, qvel, tcp_pose]
+  visual_key: rgb
+
+  # --- sparse imagination ------------------------------------------------------------
+  # The paper's headline setting, and conf/plan.yaml's default: imagine on a random 98 of
+  # the 196 patch tokens. Requires a checkpoint trained with random patch dropout and the
+  # frame-only positional embeddings of predictor=vit_nope (below) -- VWorldModelDrop
+  # refuses a full-PE predictor, since dropping tokens would silently misalign it.
+  #
+  # Set `drop: false` and `plan_num_kept_patches: null` for the Full baseline, which plans
+  # on the whole grid and needs predictor=vit instead.
+  drop: true
+  plan_num_kept_patches: 98
+  # Which patches are kept is part of what a latent means, so the subset is drawn from a
+  # private seeded stream rather than from whatever state the global RNG happens to be in
+  # -- otherwise two runs of this config plan on different tokens. null uses the ambient
+  # RNG instead.
+  #
+  # This subset is drawn once, at construction, and is the one the model plans with for its
+  # whole lifetime. The repo redraws it per replanning iteration; here the reward head is
+  # fitted against latents built from one subset, so redrawing mid-run would score rollouts
+  # against a head trained on different tokens. `SparseImaginationWorldModel.resample_kept_patches`
+  # is still callable for a deliberate experiment -- nothing calls it on its own.
+  kept_patch_seed: 0
+
+  # Flattened from the repo's conf/train.yaml (Trainer reads these keys flat). Key order
+  # and grouping follow it so the two stay diffable. Interpolations are deliberately NOT
+  # used for intra-block refs: they resolve from the composed config root, not from here,
+  # so `${img_size}` would miss. Literals are inlined instead — keep them in sync by hand.
+  # Root-level refs (${data_dir}, ${checkpoint_dir}) do resolve.
+  sparse_imagination_cfg:
+    # folder containing the run to resume from; Trainer.init_models loads
+    # ${resume_folder}/checkpoints/model_latest.pth, and raises if the folder is set but
+    # holds no checkpoint. This is the ONLY thing that puts trained weights into the model, so
+    # a wrong path here plans with a randomly initialized Sparse Imagination -- a failure no rollout
+    # looks obviously wrong under.
+    #
+    # Increment 3, epochs 15-21: the run that resumed 2026-08-26/12-35-34 at epoch 14 (run on
+    # another cluster, copied in). This fork omits best_val_loss from `_keys_to_save`, so
+    # model_best.pth is only best-within-increment -- but validation falls to the end of the
+    # increment (0.0078 at epoch 21), so the chain best IS the final epoch, and model_latest.pth,
+    # the only file this wrapper loads, holds it. The reward head was fitted on it. Read from
+    # inc3_runs/, the copy fetch_inc3_runs.sh takes from Nibi.
+    resume_folder: ${output_dir}/../inc3_runs/sparse_imagination/outputs/2026-09-22/14-54-51_lift_peg
+    ckpt_base_path: ${output_dir}/../sparse_imagination
+    data_dir: ${data_dir}
+    debug: false
+
+    img_size: 224
+    # Must equal task.cfg.frame_skip: the task's env applies this many primitive actions
+    # per step and its dataset concatenates the same ones, so one world model step is one
+    # env step. SparseImaginationWorldModel raises if the two action widths disagree.
+    frameskip: 1
+    concat_dim: 1
+    normalize_action: true
+
+    # Must equal task.cfg.num_frames — SparseImaginationWorldModel checks this one.
+    num_hist: 3
+    num_pred: 1
+    has_predictor: true
+    # Trained with a decoder, but `drop: true` discards it: a latent holding 98 of the 196
+    # patch tokens is not something the VQVAE can lay back out as an image, so `decode`
+    # raises rather than rendering nonsense. plan.py forces the same thing.
+    has_decoder: true
+
+    # Random patch dropout during training. Inference-irrelevant (it runs inside `forward`,
+    # which this wrapper never calls) but kept so the block round-trips against the run.
+    drop_rate_ub: 0.5
+
+    # action encoder
+    action_emb_dim: 10
+    num_action_repeat: 1
+
+    # proprio encoder
+    proprio_emb_dim: 10
+    num_proprio_repeat: 1
+
+    env:
+      name: lift_peg
+      args: []
+      kwargs:
+        # The repo's own conf/env/lift_peg.yaml writes this as ${env.dataset.data_path};
+        # inlined here because an interpolation inside this block resolves from the composed
+        # config root, where there is no `env`. Only its own env wrappers read it.
+        goal_data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+      dataset:
+        # Matches the task's own data_path (configs/task/maniskill_lift_peg.yaml). The camera
+        # is read off the file itself and both rgb and
+        # dino_patch_features are looked up under it, so liftpeg_dset needs no camera= here.
+        # This is the exact recording the run below was trained on, so the action/proprio
+        # normalization stats recomputed here match the training ones.
+        _target_: dataloaders.liftpeg_dset.load_liftpeg_slice_train_val
+        data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+        n_rollout: null
+        split_ratio: 0.8
+        normalize_action: true
+        transform:
+          _target_: dataloaders.img_transforms.default_transform
+          img_size: 224
+      decoder_path: null
+      num_workers: 16
+
+    model:
+      _target_: models.visual_world_model.VWorldModel
+      image_size: 224
+      num_hist: 3
+      num_pred: 1
+      train_encoder: false
+      train_predictor: true
+      train_decoder: true
+
+    encoder:
+      _target_: models.dinov3.DinoV3Encoder
+      name: dinov3_vits16
+      feature_key: x_norm_patchtokens
+      repo_dir: ${project_root}/dependencies/dinov3
+      weights: ${checkpoint_dir}/dino/dinov3_vits16_pretrain_lvd1689m-08c60483.pth
+
+    # Frame-only positional embeddings: the predictor is given one vector per frame, tiled
+    # across however many patch tokens it is handed, which is what lets it run on a random
+    # subset at all. `drop: true` requires this class; the Full baseline uses
+    # models.vit.ViTPredictor instead.
+    predictor:
+      _target_: models.vit.ViTPredictorWithoutPE
+      depth: 6
+      heads: 16
+      mlp_dim: 2048
+      dropout: 0.1
+      emb_dropout: 0
+      pool: mean
+
+    decoder:
+      _target_: models.vqvae.VQVAE
+      in_channel: 3
+      channel: 384
+      n_embed: 2048
+      n_res_block: 4
+      n_res_channel: 128
+      quantize: false
+
+    action_encoder:
+      _target_: models.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    proprio_encoder:
+      _target_: models.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    training:
+      seed: 0
+      epochs: 100
+      batch_size: 40
+      save_every_x_epoch: 1
+      save_best: true
+      save_every_x_steps: null
+      reconstruct_every_x_batch: 500
+      num_reconstruct_samples: 6
+      encoder_lr: 1.0e-06
+      decoder_lr: 0.0003
+      predictor_lr: 0.0005
+      action_encoder_lr: 0.0005
+
+    # Trainer overwrites these in __init__ (saved_folder <- os.getcwd(), the batch sizes
+    # <- training.batch_size / num_processes). Kept only so the block round-trips.
+    saved_folder: ${output_dir}/../sparse_imagination
+    gpu_batch_size: 40
+    effective_batch_size: 40

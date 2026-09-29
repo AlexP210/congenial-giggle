@@ -1,0 +1,21 @@
+# from-scratch DINOv3 ViT-S/16 patch encoder (ablation against the pretrained backbone)
+
+# Deliberately the non-passthrough class. `DINOV3PassthroughEncoderModel.encode`
+# short-circuits to the observation's `dino_patch_features`, which are *pretrained*
+# features - cached by the dataset or by the online trainer - so a from-scratch backbone
+# built on it would silently never run, and the ablation would measure nothing.
+_target_: s2p.models.dinov3_encoder_model.DINOV3EncoderModel
+
+task: ${task}
+
+cfg:
+  resize_size: 224
+  model_name: dinov3_vits16
+  token_mode: patch
+  # Random init rather than LVD-1689M weights; the backbone is then trained by the run's
+  # own optimizer, which is the point of the ablation.
+  pretrained: False
+  freeze: False
+  checkpoint: null
+  device: ${device}
+  observation_key: rgb

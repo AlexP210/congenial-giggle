@@ -1,0 +1,10 @@
+# LiftPeg run of the online deterministic recipe, with a fresh (trainable) DINOv3 vision encoder
+# in place of the frozen one.
+#
+# Everything else is `train_visual_online_deterministic_lift_peg.yaml`, so this run stays in step
+# with it. Only the vision encoder differs; anything else belongs in that file or its base.
+
+defaults:
+  - train_visual_online_deterministic_lift_peg
+  - override model@vision_encoder: fresh_dinov3_vits_patch_encoder
+  - _self_

@@ -1,0 +1,10 @@
+# cross-attention pooling evaluator configuration
+
+_target_: s2p.evaluators.attention_evaluator.AttentionEvaluator
+
+task: ${task}
+
+cfg:
+  device: ${device}
+  # Shared with the saliency evaluator, so both walk the same trajectory
+  seed: ${seed}

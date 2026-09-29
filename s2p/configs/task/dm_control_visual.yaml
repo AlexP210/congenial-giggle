@@ -1,0 +1,15 @@
+# stochastic student configuration
+
+_target_: s2p.tasks.visual_dmcontrol_task.VisualDMControlTask
+
+cfg:
+  task_name: ???
+
+  training_data_path: ???
+  validation_data_path: ???
+  seed: ${seed}
+  horizon: 4
+  fraction: 1.0
+  overlap_ratio: 0.0
+  load_device: cpu
+  batch_device: ${device}

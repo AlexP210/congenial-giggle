@@ -1,0 +1,15 @@
+_target_: s2p.models.joint_encoder_model.JointEncoderModel
+
+encoders:
+  - ${vision_encoder}
+  - ${proprioception_encoder}
+  - ${privileged_encoder}
+
+task: ${task}
+
+cfg:
+  downprojection_dim: ${latent_dimension}
+  project: false
+  freeze: false
+  checkpoint: null
+  device: ${device}

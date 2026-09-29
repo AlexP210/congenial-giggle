@@ -1,0 +1,12 @@
+# stochastic student configuration
+
+_target_: s2p.models.dinov3_encoder_model.DINOV3EncoderModel
+
+task: ${task}
+
+cfg:
+  resize_size: 256
+  model_name: dinov3_convnext_small
+  freeze: True
+  checkpoint: ${checkpoint_dir}/dino/dinov3_convnext_small_pretrain_lvd1689m-296db49d.pth
+  device: ${device}

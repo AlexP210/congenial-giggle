@@ -1,0 +1,28 @@
+# vision_proprioception_joint_encoder plus the goal position, for PickCube.
+#
+# PickCube's goal marker (`goal_site`) is in ManiSkill's `_hidden_objects`, so it is hidden from
+# every camera before each observation capture -- unlike PushCube's `goal_region` decal, which is
+# plainly visible. Under the wrist view a grasped cube also looks much the same wherever the arm
+# is, so without `goal_pos` the target is not recoverable from the observation at all.
+#
+# The DINO-based agents carry the same extra 3 dims for the same reason (28-wide proprio on
+# PickCube against 25 elsewhere), so this keeps S2P comparable to them rather than handing it a
+# harder problem than the baselines it is measured against.
+
+_target_: s2p.models.joint_encoder_model.JointEncoderModel
+
+encoders:
+  - ${vision_encoder}
+  - ${tcp_proprioception_encoder}
+  - ${qpos_proprioception_encoder}
+  - ${qvel_proprioception_encoder}
+  - ${goal_proprioception_encoder}
+
+task: ${task}
+
+cfg:
+  downprojection_dim: ${latent_dimension}
+  project: false
+  freeze: false
+  checkpoint: null
+  device: ${device}

@@ -1,0 +1,7 @@
+# probe loss configuration
+
+_target_: s2p.losses.probe_loss.ProbeLoss
+
+cfg:
+  target_path: ${probe_target_path}
+  device: ${device}

@@ -1,0 +1,27 @@
+# stochastic pooling student configuration
+# A shared MLP maps each teacher token to its own Gaussian over the latent; those
+# per-token distributions are then pooled into a single Gaussian.
+
+_target_: s2p.models.stochastic_pooling_student_encoder_model.StochasticPoolingStudentEncoderModel
+
+task: ${task}
+teacher: ${teacher_encoder}
+
+cfg:
+  ema_decay: 0.9
+  latent_dim: ${latent_dimension}
+  token_hidden_layers: 2
+  token_hidden_dim: 512
+  token_output_dim: 512
+  pooling: mean         # token weighting: mean (uniform) | attention (learned)
+  aggregation: mixture  # how the token Gaussians are combined:
+                        #   mixture     - moment-matched mixture; token disagreement adds variance
+                        #   parameters  - average the means and the standard deviations
+                        #   independent - distribution of the average of one sample per token
+                        #   product     - precision-weighted product of experts
+  head_hidden_layers: 1  # per-token mean / log-std heads
+  head_hidden_dim: 512
+  device: ${device}
+  checkpoint: null
+  freeze: false
+  sample_mean: false

@@ -1,0 +1,8 @@
+# distillation loss configuration
+
+_target_: s2p.losses.teacher_student_value_loss.TeacherStudentValueLoss
+
+cfg:
+  latent_value_imagination_horizon: 3
+  lam: 1
+  rho: 0.5

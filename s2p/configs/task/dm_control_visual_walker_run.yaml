@@ -1,0 +1,15 @@
+# stochastic student configuration
+
+_target_: s2p.tasks.visual_dmcontrol_task.VisualDMControlTask
+
+cfg:
+  task_name: walker-run
+
+  training_data_path: ${data_dir}/tdmpc2/mt30-visual-walker-run-training.pt
+  validation_data_path: ${data_dir}/tdmpc2/mt30-visual-walker-run-validation.pt
+  seed: ${seed}
+  horizon: 4
+  fraction: 1.0
+  overlap_ratio: 0.0
+  load_device: cpu
+  batch_device: ${device}

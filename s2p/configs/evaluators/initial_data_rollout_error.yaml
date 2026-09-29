@@ -1,0 +1,25 @@
+# Multi-step rollout error on the data the run started with, over a snapshot that never changes.
+#
+# The companion to `initial_data_loss.yaml`: same fixed windows, but scored by prediction accuracy
+# rather than by the training objective. Worth having both -- the loss is what is optimized, while
+# `reward/{h}_step_rmse_over_true_std` is what says whether the model can still predict on the
+# early distribution, on a scale that does not move when the data does.
+#
+# One evaluator over that snapshot. `initial_data.yaml` is the same wrapper taking several,
+# which is what a run wanting more than one metric on the early data should compose instead --
+# two of these wrappers would hold two snapshots, of different windows.
+
+defaults:
+  # As in `initial_data_loss.yaml`: a mapping rather than a list so Hydra can compose into it,
+  # and more may be added -- they share the one snapshot and are then prefixed by these names.
+  - /evaluators@evaluators.rollout_error: rollout_error
+
+_target_: s2p.evaluators.initial_data_wrapper.InitialDataWrapper
+
+task: ${task}
+
+cfg:
+  # See `initial_data_loss.yaml` for the memory cost of the snapshot.
+  fraction: 1.0
+  max_windows: 64
+  storage_device: cpu

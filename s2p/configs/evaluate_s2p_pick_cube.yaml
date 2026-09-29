@@ -1,0 +1,79 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_pick_cube
+
+  # See evaluate_dino_wm_pusht.yaml: DINOWorldModel's objective is a terminal `state_value`,
+  # so the planner has to bootstrap it rather than sum a reward that is always zero.
+  - planner: mppi_with_value
+
+  - model@vision_encoder: frozen_dinov3_vits_passthrough_patch_encoder
+  - model@tcp_proprioception_encoder: identity_encoder_tcp_pose
+  - model@qpos_proprioception_encoder: identity_encoder_q_pos
+  - model@qvel_proprioception_encoder: identity_encoder_q_vel
+  - model@goal_proprioception_encoder: identity_encoder_goal_pos
+
+  - model@teacher_encoder: vision_proprioception_goal_joint_encoder
+  - model@student_encoder: fresh_student_encoder_deterministic_cap
+
+  - model@encoder: teacher_student_encoder
+  - model@dynamics: fresh_dynamics_deterministic_mlp
+  - model@reward: fresh_reward_deterministic_mlp
+  - model@value: fresh_tdmpc2
+  - model@policy: fresh_tdmpc2
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.planner_convergence: planner_convergence
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+
+  - _self_
+
+data_horizon: 2
+
+agent:
+  cfg:
+    checkpoint_folder: ${output_dir}/checkpoints/TSD_pick-cube_deterministic_deterministic_planner_final_s1-20260923_171333/real_task_planning/best_success_once_rate
+
+task:
+  cfg:
+    data_path: null
+    visual_observation_resolution: 64
+    sim_backend: physx_${device}
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 50
+      max_episode_steps: 200
+  real_task_planning:
+    cfg:
+      num_envs: 50
+      max_episode_steps: 200
+
+planner:
+  cfg:
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0.125
+    # Only scales the objective by discount^H; 1.0 leaves it exactly DINO-WM's.
+    discount: 1.0
+
+latent_dimension: 512
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

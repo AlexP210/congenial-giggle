@@ -1,0 +1,8 @@
+# distillation loss configuration
+
+_target_: s2p.losses.q_policy_loss.QPolicyLoss
+
+cfg:
+  latent_policy_imagination_horizon: 1
+  lam: 1
+  rho: 1

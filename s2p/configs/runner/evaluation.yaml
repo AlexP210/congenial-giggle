@@ -1,0 +1,17 @@
+# configuration specific to the training runner (overrides or complements defaults)
+
+_target_: s2p.runners.evaluation_runner.EvaluationRunner
+
+task: ${task}
+
+cfg:
+  seed: ${seed}
+  save_path: null
+  use_wandb: true
+  wandb_project: Squeeze-to-Plan
+  run_name: ???
+  group_name: null
+  device: ${device}
+
+model: ${agent}
+evaluators: ${evaluators}

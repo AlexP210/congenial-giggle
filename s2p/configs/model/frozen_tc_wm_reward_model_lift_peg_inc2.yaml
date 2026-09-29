@@ -1,0 +1,36 @@
+# Frozen reward head over a TC-WM latent, for the ManiSkill LiftPeg task.
+#
+# Not TC-WM-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has -- the head reads its token count and width off a probe encode, so TC-WM's
+# `[projected | action | proprio]` token needs no config change. What makes this config
+# TC-WM's is the checkpoint below, which was fitted against that world model's latent and is
+# meaningless over any other.
+#
+# Written by train_tc_wm_reward_lift_peg.yaml. `freeze: true` also means `save_to_file`
+# records a reference to that checkpoint rather than copying its weights.
+#
+# The increment-2 head, fitted on 2026-08-26/12-17-16_lift_peg's `model_latest.pth` (epoch
+# 14, val 0.1975) -- which is what `frozen_tc_wm_lift_peg_inc2.yaml` loads. LiftPeg is the
+# one TC-WM cell whose last epoch was NOT its best, so it has two increment-2 heads; the
+# other, `TCWMReward_lift_peg_CorrectData_BestCkpt-20260914_092715`, was fitted on that same
+# folder's `model_best.pth` (epoch 11, val 0.1909) and is used by the increment-3 config
+# (`frozen_tc_wm_reward_model_lift_peg.yaml`), because epoch 11 is also the 72h best.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  checkpoint: ${output_dir}/checkpoints/TCWMReward_lift_peg_CorrectData-20260904_162314/loss/best_total_loss/reward.pt
+  freeze: true

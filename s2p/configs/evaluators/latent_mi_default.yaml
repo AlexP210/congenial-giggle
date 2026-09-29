@@ -1,0 +1,16 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.latent_mi_evaluator.LatentMIEvaluator
+
+dataset: ${datasets.evaluation}
+
+cfg:
+  train_fraction: 0.8
+  batch_size: 256
+  lmi_batch_size: 128
+  lmi_latent_size: 10
+  lmi_lr: 0.001
+  lmi_patience: 10
+  lmi_epochs: 100
+  device: ${device}
+  num_estimates: 5

@@ -1,0 +1,25 @@
+# distillation loss configuration
+
+_target_: s2p.losses.stochastic_distillation_loss.StochasticDistillationLoss
+
+cfg:
+  dynamics_ll_coefficient: 1
+  reward_ll_coefficient: 1
+  kl_coefficient: 0
+  kl_mode: standard
+  # Ablation switches: stop each term's gradient at the encoder, without removing the term.
+  # False everywhere means every loss trains the encoder, as before.
+  stop_reward_loss: False
+  stop_dynamics_loss: False
+  stop_kl_loss: False
+  # Where the dynamics model's next-latent target comes from: 'sample' draws from the
+  # encoder's distribution, 'mean' takes its mean. See the loss for the tradeoff.
+  dynamics_target: sample
+  # How the multi-step losses step the imagined latent forward: 'sample' rsamples the
+  # dynamics prediction, 'mean' takes its mean (what the planner chains when the
+  # dynamics model has `sample_mean` set).
+  imagination_rollout_method: sample
+  latent_rewards_imagination_horizon: 1
+  latent_dynamics_imagination_horizon: 1
+  lam: 1
+  rho: 1

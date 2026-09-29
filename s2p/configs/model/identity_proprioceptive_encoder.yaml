@@ -1,0 +1,5 @@
+# stochastic student configuration
+
+_target_: s2p.models.identity_encoder.IdentityEncoder
+
+cfg: {}

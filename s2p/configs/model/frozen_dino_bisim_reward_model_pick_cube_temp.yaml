@@ -1,0 +1,35 @@
+# TEMP frozen reward head over a DINO-Bisim latent, for the ManiSkill PickCube task.
+#
+# Not DINO-Bisim-specific as a class: DINOWMRewardModel asks its encoder only for
+# `_unflatten_latent` and `write_action_into_newest_frame`, which every DINO-WM-family wrapper
+# has -- the head reads its token count and width off a probe encode, so the compact
+# bisimulation token needs no config change. What makes this config DINO-Bisim's is the
+# checkpoint below, which was fitted against that world model's latent and is meaningless over
+# any other.
+#
+# Written by train_dino_bisim_reward_pick_cube.yaml. `freeze: true` also means
+# `save_to_file` records a reference to that checkpoint rather than copying its weights.
+
+_target_: s2p.models.dino_wm_reward_model.DINOWMRewardModel
+
+task: ${task}
+encoder: ${encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 1
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  head_hidden_layers: 1
+  head_hidden_dim: 512
+  device: ${device}
+  # TEMP -- shape only. This is the 2026-09-23 00:* head, fitted before the dataloader fix
+  # (num_workers=0 against an NFS-mmapped dataset), so it reached 4-7K steps against the
+  # 80-99K its push_cube/lift_peg siblings got: ~5% trained. It has the right architecture
+  # and loads cleanly, which is all a FLOPs/latency measurement needs. Do NOT use it for
+  # planning results -- frozen_dino_bisim_reward_model_pick_cube.yaml is the real one, still
+  # carrying a  placeholder until the refit lands.
+  checkpoint: ${output_dir}/checkpoints/DINOBisimReward_pick_cube_CorrectData_BestCkpt-20260923_005346/loss/best_total_loss/reward.pt
+  freeze: true

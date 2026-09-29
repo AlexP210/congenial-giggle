@@ -1,0 +1,55 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: training
+  - trainer: offline
+  - task: maniskill_push_cube
+
+  - model@dino_wm: frozen_dino_wm_push_cube
+  - model@reward: fresh_dino_wm_reward_model
+
+  # - planner: mppi_with_value
+  - agent: fresh_agent
+
+  - loss@loss_functions.reward: dino_wm_reward_loss
+
+  - evaluators@evaluators.loss: loss
+
+  - _self_
+
+data_horizon: 2
+
+# Fit the reward head on the PPO-staged recording instead of the task's default
+# ppo-visual-wrist demos. `_self_` comes last in the defaults, so this wins over the `task`
+# group. `json_path` moves with `data_path`: the json is the episode index for the h5 beside
+# it, and pairing one dataset's h5 with another's index misreads every episode boundary.
+task:
+  cfg:
+    data_path: ${data_dir}/maniskill/${.task_name}-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+    json_path: ${data_dir}/maniskill/${.task_name}-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.json
+
+encoder: ${dino_wm}
+dynamics: ${dino_wm}
+# reward: ${dino_wm}
+# This branch's DINOWorldModel implements no StateValueModelBase -- there is no
+# goal-distance `state_value` to bootstrap. This run only fits the reward head anyway.
+value: null
+# No planner: this run only fits the reward head, and `_self_` comes last in the defaults,
+# so a `planner` group selected there would be overridden by this anyway. AgentModel takes
+# `planner=None` -- its PLANNING action mode needs only dynamics and reward.
+planner: null
+policy: null
+
+loss_function_weights:
+  reward: 1.0
+
+device: cuda:0
+seed: 1
+
+# Read by the task, which stages the recording into it when set (`copy_dataset_to_local_dir`).
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

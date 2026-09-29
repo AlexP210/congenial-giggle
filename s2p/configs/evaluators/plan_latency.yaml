@@ -1,0 +1,9 @@
+# mutual information evaluator configuration
+
+_target_: s2p.evaluators.plan_latency_evaluator.PlanLatencyEvaluator
+
+task: ${task}
+
+cfg:
+  num_plans: 100
+  device: ${device}

@@ -1,0 +1,104 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+#
+# Shared base for the per-task online deterministic runs: `train_visual_online_deterministic_lift_peg`,
+# `_pick_cube` and `_push_cube` each inherit this file and override only what their task needs.
+# Anything common to all three belongs here rather than being repeated in each of them. Still
+# runnable on its own, on the default task in the defaults list below.
+#
+# Evaluators are the exception to "everything common lives here": Hydra cannot drop a defaults
+# entry from a child config, and LiftPeg currently runs a different set from the other two. So
+# only the evaluators all three share are listed here; each task config adds the rest.
+
+defaults:
+  - runner: training
+  - trainer: online
+  - task: maniskill_push_cube
+
+  - model@vision_encoder: frozen_dinov3_vits_passthrough_patch_encoder
+  - model@tcp_proprioception_encoder: identity_encoder_tcp_pose
+  - model@qpos_proprioception_encoder: identity_encoder_q_pos
+  - model@qvel_proprioception_encoder: identity_encoder_q_vel
+
+  - model@teacher_encoder: vision_proprioception_joint_encoder
+  - model@student_encoder: fresh_student_encoder_deterministic_cap
+
+  - model@encoder: teacher_student_encoder
+  - model@dynamics: fresh_dynamics_deterministic_mlp
+  - model@reward: fresh_reward_deterministic_mlp
+  - model@value: fresh_tdmpc2
+  - model@policy: fresh_tdmpc2
+
+  - agent: fresh_agent
+
+  - planner: mppi_with_value
+
+
+  - loss@loss_functions.distillation: deterministic_distillation
+  - loss@loss_functions.tdmpc2_value: tdmpc2_value_loss
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.tsne: tsne
+  - evaluators@evaluators.loss: loss
+  - evaluators@evaluators.rollout_error: rollout_error
+
+  # - evaluators@saliency: saliency
+  # - evaluators@evaluators.saliency_online: saliency_online
+  # - evaluators@attention: attention
+  # - evaluators@evaluators.attention_online: attention_online
+
+  # - evaluators@evaluators.plan_latency: plan_latency
+  # - evaluators@evaluators.flops: flops
+
+  - _self_
+
+trainer:
+  cfg:
+    # The env stacks `task.cfg.num_frames` frames on their own axis, so the replay buffer
+    # can store each window deduplicated -- half the bytes per window at horizon 4.
+    num_stacked_frames: ${task.cfg.num_frames}
+    batch_size: 64
+    update_to_data_ratio: 1
+    buffer_size: 100_000
+    buffer_storage_dir: /tmp/
+    num_envs: 256
+
+loss_function_weights:
+  distillation: 1.0
+  tdmpc2_value: 1.0
+
+loss_horizon: 1
+data_horizon: 2
+
+loss_functions:
+  distillation:
+    cfg:
+      kl_mode: standard
+      kl_coefficient: 0.1
+      reward_mse_coefficient: 10
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 50
+  real_task_planning:
+    cfg:
+      num_envs: 50
+
+task:
+  cfg:
+    # Indexed, so sapien and torch land on the same GPU rather than sapien defaulting to
+    # cuda:1. Required for `trainer.cfg.num_envs > 1`.
+    sim_backend: physx_${device}
+
+latent_dimension: 512
+
+device: ???
+seed: 1
+
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???
+local_dir: null

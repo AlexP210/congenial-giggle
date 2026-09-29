@@ -1,0 +1,16 @@
+_target_: s2p.models.joint_encoder_model.JointEncoderModel
+
+encoders:
+  - ${vision_encoder}
+  - ${tcp_proprioception_encoder}
+  - ${qpos_proprioception_encoder}
+  - ${qvel_proprioception_encoder}
+
+task: ${task}
+
+cfg:
+  downprojection_dim: ${latent_dimension}
+  project: false
+  freeze: false
+  checkpoint: null
+  device: ${device}

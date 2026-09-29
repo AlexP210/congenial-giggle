@@ -1,0 +1,15 @@
+# stochastic student configuration
+
+_target_: s2p.tasks.dmcontrol_task.DMControlTask
+
+cfg:
+  task_name: acrobot-swingup
+
+  training_data_path: ${data_dir}/tdmpc2/mt30-acrobot-swingup-training.pt
+  validation_data_path: ${data_dir}/tdmpc2/mt30-acrobot-swingup-validation.pt
+  seed: ${seed}
+  horizon: 4
+  fraction: 1.0
+  overlap_ratio: 0.0
+  load_device: ${device}
+  batch_device: ${device}

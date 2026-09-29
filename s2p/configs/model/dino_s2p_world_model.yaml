@@ -1,0 +1,23 @@
+# DINO-WM's latent and dynamics, scored by a S2P reward and value.
+#
+# Task-agnostic wiring only: which DINO-WM and which S2P run are used is decided by the
+# `dino_wm`, `s2p_encoder`, `s2p_reward` and `s2p_value` nodes of the composing config.
+# See `evaluate_dino_s2p_push_cube.yaml`.
+
+_target_: s2p.models.dino_s2p_world_model.get_or_create
+
+# The composing config hands this one node to the encoder, dynamics, reward and value slots,
+# and Hydra instantiates each reference separately. `_recursive_: false` makes everything
+# below arrive as config, so `get_or_create` can check its cache *before* building the S2P
+# components -- otherwise each slot would build its own S2P encoder (and DINOv3 backbones).
+_recursive_: false
+
+task: ${task}
+world_model: ${dino_wm}
+s2p_encoder: ${s2p_encoder}
+s2p_reward: ${s2p_reward}
+s2p_value: ${s2p_value}
+
+cfg:
+  freeze: true
+  device: ${device}

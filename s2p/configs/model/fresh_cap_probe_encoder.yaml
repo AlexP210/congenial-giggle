@@ -1,0 +1,18 @@
+# stochastic student configuration
+
+_target_: s2p.models.deterministic_cap_student_encoder_model.DeterministicCAPStudentEncoderModel
+
+task: ${task}
+teacher: ${teacher_encoder}
+
+cfg:
+  embedding_dim: 512
+  n_heads: 4
+  latent_dim: 3
+  n_queries: 4
+  ff_hidden_layers: 2
+  ff_hidden_dim: 512
+  n_blocks: 1
+  device: ${device}
+  checkpoint: null
+  freeze: false

@@ -1,0 +1,72 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+#
+# The LiftPeg counterpart of evaluate_dino_wm_push_cube.yaml.
+
+defaults:
+  - runner: evaluation
+  - task: maniskill_lift_peg
+
+  - model@dino_wm: frozen_dino_wm_lift_peg
+  - model@dino_wm_reward: frozen_dino_wm_reward_model_lift_peg
+
+  # See evaluate_dino_wm_pusht.yaml: DINOWorldModel's objective is a terminal `state_value`,
+  # so the planner has to bootstrap it rather than sum a reward that is always zero.
+  - planner: mppi_without_value
+
+  - agent: fresh_agent
+
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  - evaluators@evaluators.plan_latency: plan_latency
+  - evaluators@evaluators.flops: flops
+  # - evaluators@evaluators.rollout_error: rollout_error
+  - evaluators@evaluators.planner_convergence: planner_convergence
+
+  - _self_
+
+data_horizon: 2
+
+encoder: ${dino_wm}
+dynamics: ${dino_wm}
+reward: ${dino_wm_reward}
+value: null
+policy: null
+
+# Evaluator settings match evaluate_s2p_*.yaml / evaluate_tdmpc2_*.yaml (num_episodes is the
+# evaluators' default 50 in all of them). num_envs is 8 rather than their 50: at 1 env this
+# model already peaks at ~4 GB under this planner, so 50 envs would not fit on an L40S, and
+# batching only changes wall clock, not results.
+task:
+  cfg:
+    sim_backend: physx_${device}
+
+evaluators:
+  simulation_task_planning:
+    cfg:
+      num_envs: 8
+      max_episode_steps: 200
+  real_task_planning:
+    cfg:
+      num_envs: 8
+      max_episode_steps: 200
+
+planner:
+  cfg:
+    horizon: 5
+    num_samples: 64
+    num_elites: 8
+    iterations: 6
+    # No policy to seed from, and a non-zero fraction with `policy: null` is a NameError.
+    fraction_of_policy_trajectories: 0
+    # Only scales the objective by discount^H; 1.0 leaves it exactly DINO-WM's.
+    discount: 1.0
+
+device: cuda:0
+seed: 1
+
+local_dir: null
+project_root: ???
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

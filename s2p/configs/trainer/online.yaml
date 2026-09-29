@@ -1,0 +1,63 @@
+# mutual information evaluator configuration
+
+_target_: s2p.trainers.online_trainer.OnlineTrainer
+
+task: ${task}
+loss_functions: ${loss_functions}
+loss_function_weights: ${loss_function_weights}
+
+cfg:
+  device: ${device}
+  seed: ${seed}
+  batch_size: 16
+  buffer_size: 25_000
+  # Back the replay buffer with memory-mapped files in this directory rather than RAM,
+  # which is what makes a cached-teacher buffer of this size fit at all (the fp16 DINO
+  # features alone are 2.71 MB per window). Deleted when the run ends. Set to null to go
+  # back to an in-RAM buffer; any replacement must be real disk, not a tmpfs mount.
+  buffer_storage_dir: /tmp
+  update_to_data_ratio: ${data_horizon}
+  cache_teacher_latents: True
+  # Drop the pixels a cached teacher was computed from, since nothing reads them once the
+  # features are stored. Set False to keep them for an evaluator that runs over the training
+  # buffer and needs pixel gradients (SaliencyEvaluator); costs 2.71 MB per window.
+  drop_cached_teacher_inputs: True
+  horizon: ${data_horizon}
+  # How many copies of the env this trainer collects from, stepped in lockstep. The env is
+  # built by this component rather than shared, so an evaluator can run a different number.
+  #
+  # One collection call returns `num_envs` windows instead of one, for roughly the cost of one:
+  # a ManiSkill batch steps and renders together, and the planner scores all `num_envs` states in
+  # a single MPPI population. `update_to_data_ratio` is held fixed as this grows (the collection
+  # frequency is divided by `num_envs`), so raising it buys wall clock without changing the
+  # training recipe.
+  #
+  # Two things scale with it: the planner rolls out `num_envs * planner.cfg.num_samples`
+  # trajectories at once, which for a large-latent world model is the binding constraint, and
+  # the `num_envs` windows of one call come from envs reset together, so they are more
+  # correlated than windows collected one after another.
+  #
+  # Only ManiSkill tasks can go above 1, and only on a physx_cuda `task.cfg.sim_backend`;
+  # dm_control steps a single simulator and refuses.
+  num_envs: 1
+  action_mode: plan
+  # Seed (see `seed_action_mode`) until the buffer holds this many *windows* (not env steps --
+  # one window is `horizon` of them). Parallel collection fills it `num_envs` times faster per
+  # call, but no faster per env step, so the amount of exploration this buys is unchanged.
+  seed_steps: 10_000
+  # How the buffer is filled during those `seed_steps`: `random` samples the action space,
+  # `agent` acts with the model through `action_mode`, just as after seeding. Training still
+  # waits for `seed_steps` either way, so `agent` only changes what the first windows contain --
+  # which is the point for a warm-started model, and mostly noise for a fresh one.
+  seed_action_mode: random
+  # Number of frames the env's `FrameStack` stacks on a dedicated observation axis, which
+  # lets the buffer store a window as `num_stacked_frames + horizon - 1` frames rather
+  # than `horizon * num_stacked_frames` (2x at horizon 4, 2.25x at horizon 6). Must equal
+  # `task.cfg.num_frames`; the dataset checks the overlap it implies on every append.
+  #
+  # `null` stores windows densely, which is the only correct setting for a task whose
+  # observations have no frame axis to deduplicate along: a state-based dm_control task, or
+  # the visual one, whose wrapper concatenates frames into the *channel* axis instead.
+  num_stacked_frames: null
+  load_device: cpu
+  batch_device: ${device}

@@ -1,0 +1,233 @@
+# Frozen DINO-Bisim teacher configuration -- increment 3 (the 72h run).
+#
+# The increment-2 (48h) pairing this replaced is kept alongside as
+# `frozen_dino_bisim_lift_peg_inc2.yaml`; the two are not interchangeable, since each is
+# tied to the reward head fitted on it.
+
+_target_: s2p.models.dino_bisim_world_model.get_or_create
+
+# `cfg.dino_bisim_cfg` below is the repo's own train config, and it is full of `_target_`s
+# (model, encoder, predictor, decoder, ...) that Trainer instantiates itself, in order, once
+# it knows the dataset dimensions — and the bisimulation encoder it builds by hand from
+# `bisim_latent_dim` and the encoder's width. Hydra instantiates recursively by default and
+# would build them here instead; it gets as far as `dino_bisim_cfg.model` and fails with
+# "VWorldModel.__init__() missing 5 required positional arguments". `_recursive_` is only
+# honoured as "do not instantiate my kwargs" on a node that has a `_target_`, so it has to
+# sit here rather than on `dino_bisim_cfg`; the cost is that `task` below arrives as a config
+# too, which DINOBisimWorldModel.__init__ rebuilds (get_or_create memoizes, so it is the same
+# task object every other model is handed).
+_recursive_: false
+
+task: ${task}
+
+cfg:
+  freeze: true
+  device: ${device}
+  # The task's dataset ships DINOv3 patch features precomputed with this very backbone
+  # (196x384, dinov3_vits16), so encode_visual short-circuits to them and offline batches
+  # never run the ViT. The bisimulation encoder consumes those features either way. Leave
+  # unset only to force the live visual path.
+  dino_feature_key: dino_patch_features
+  # Order matters: this is concatenated in sequence and must reproduce liftpeg_dset's
+  # PROPRIO_KEYS = [obs/agent/qpos, obs/agent/qvel, obs/extra/tcp_pose] (9+9+7=25), which
+  # is what this model's proprio encoder was trained on.
+  proprio_keys: [qpos, qvel, tcp_pose]
+  visual_key: rgb
+
+  # Which file inside `checkpoints/` to load over whatever `Trainer.init_models` resumed.
+  # The Trainer only ever reads `model_latest.pth` -- the name is written out literally in
+  # the fork's train.py -- so a run whose best epoch is not its last is unreachable through
+  # `resume_folder` alone. Loaded by `DINOBisimWorldModel.__init__` through the same
+  # native-checkpoint path the Trainer would have used. null keeps the Trainer's own choice.
+  #
+  # Whichever is chosen here has to be the one the frozen reward head was fitted on: that
+  # head cross-attends this model's latent window, so it is tied to these exact weights.
+  #
+  # model_best.pth here, and it MATTERS: this is the one DINO-Bisim cell where best and
+  # latest differ. `model_best.pth` is epoch 24 (val 0.1925), the FIRST epoch of the
+  # increment; validation drifts back up to 0.1945 by epoch 30, which is what
+  # `model_latest.pth` holds. The reward head below was fitted on epoch 24.
+  resume_checkpoint: model_best.pth
+
+  # Flattened from the repo's conf/train.yaml (Trainer reads these keys flat). Key order and
+  # grouping follow it so the two stay diffable. Interpolations are deliberately NOT used for
+  # intra-block refs: they resolve from the composed config root, not from here, so
+  # `${img_size}` would miss. Literals are inlined instead — keep them in sync by hand.
+  # Root-level refs (${data_dir}, ${checkpoint_dir}) do resolve.
+  dino_bisim_cfg:
+    # folder containing the run to resume from; Trainer.init_models loads
+    # ${resume_folder}/checkpoints/model_latest.pth, and raises if the folder is set but
+    # holds no checkpoint. This is the ONLY thing that puts trained weights into the model, so
+    # a wrong path here plans with a randomly initialized DINO-Bisim -- a failure no rollout
+    # looks obviously wrong under.
+    #
+    # Whichever is chosen here has to be the one the frozen reward head was fitted on
+    # (frozen_dino_bisim_reward_model_lift_peg.yaml): that head cross-attends this model's
+    # latent window, so it is tied to these exact weights.
+    #
+    # Increment 3, epochs 24-30: the run that resumed 2026-08-28/17-12-43 at epoch 23. Its
+    # `model_best.pth` (epoch 24, val 0.1925) only just beats increment 2's epoch 23
+    # (0.1945), and `resume_checkpoint` above must name it -- see there.
+    # Read from inc3_runs/, the copy fetch_inc3_runs.sh takes from Nibi.
+    resume_folder: ${output_dir}/../inc3_runs/dino_bsmpc/outputs/2026-09-18/08-35-15_lift_peg
+    ckpt_base_path: ${output_dir}/../dino_bsmpc
+    data_dir: ${data_dir}
+    debug: false
+
+    img_size: 224
+    # Must equal task.cfg.frame_skip: the task's env applies this many primitive actions
+    # per step and its dataset concatenates the same ones, so one world model step is one
+    # env step. DINOBisimWorldModel raises if the two action widths disagree.
+    frameskip: 1
+    concat_dim: 1
+    normalize_action: true
+
+    # action encoder
+    action_emb_dim: 10
+    num_action_repeat: 1
+
+    # proprio encoder
+    proprio_emb_dim: 10
+    num_proprio_repeat: 1
+
+    # --- the bisimulation encoder ---------------------------------------------------
+    # A per-patch MLP mapping each 384-wide backbone token down to bisim_latent_dim,
+    # trained so that dynamically equivalent states land near each other. A token is then
+    # 64 + 10 + 10 = 84 channels against DINO-WM's 404, so one predictor window is
+    # 3*196*84 ~ 49k floats per sample rather than ~238k. Everything below it is a
+    # training-time loss knob; only bisim_latent_dim and has_bisim change what the model
+    # *is*, and DINOBisimWorldModel cross-checks both against the predictor.
+    #
+    # has_bisim: false makes this exactly DINO-WM -- the fork's own baseline, and the only
+    # setting in which `decode` works.
+    has_bisim: true
+    bisim_latent_dim: 64
+    bisim_hidden_dim: 2048
+    bisim_coef: 1
+    var_loss_coef: 1
+    PCA1_loss_target: 0.0001
+    VC_target: 0.5
+    num_pcs: 10
+    PCAloss_epoch: 2000
+    bisim_memory_buffer_size: 1000
+    bisim_comparison_size: 200
+
+    num_hist: 3
+    num_pred: 1
+    has_predictor: true
+    # Trained with a decoder, but it is inert here: Trainer builds it for the backbone's 384
+    # channels while the latent's visual block is 64 wide, and the repo guards every decode
+    # with `not self.has_bisim`. DINOBisimWorldModel.decode says so rather than raising a
+    # shape error.
+    has_decoder: true
+
+    accelerate_launch: false
+    # torch.compile the world model. The repo's default is off; DINOBisimWorldModel unwraps
+    # an OptimizedModule either way, so this only affects Trainer's own build time.
+    compile_model: false
+
+    env:
+      name: lift_peg
+      args: []
+      kwargs:
+        # The repo's own conf/env/lift_peg.yaml writes this as ${env.dataset.data_path};
+        # inlined here because an interpolation inside this block resolves from the composed
+        # config root, where there is no `env`. Only its own env wrappers read it.
+        goal_data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+      dataset:
+        # Matches the task's own data_path (configs/task/maniskill_lift_peg.yaml). The camera
+        # is read off the file itself and both rgb and
+        # dino_patch_features are looked up under it, so liftpeg_dset needs no camera= here.
+        # This is the exact recording the run below was trained on, so the action/proprio
+        # normalization stats recomputed here match the training ones.
+        _target_: datasets.liftpeg_dset.load_liftpeg_slice_train_val
+        data_path: ${data_dir}/maniskill/LiftPegUpright-v1.1-ppo-staged-pd_ee_delta_pos/videos/trajectory.rgb.pd_ee_delta_pos.physx_cuda.dino16.mmap.frac1.0.h5
+        n_rollout: null
+        split_ratio: 0.8
+        normalize_action: true
+        transform:
+          _target_: datasets.img_transforms.default_transform
+          img_size: 224
+      decoder_path: null
+      num_workers: 16
+
+    model:
+      _target_: models.visual_world_model.VWorldModel
+      image_size: 224
+      num_hist: 3
+      num_pred: 1
+      train_encoder: false
+      train_predictor: true
+      train_decoder: true
+      train_bisim: true
+      # true trains the bisimulation encoder straight from pixels, patching the frame
+      # itself and bypassing the backbone. DINOBisimWorldModel follows the repo into that
+      # branch, including its quirk of running the backbone anyway and discarding it.
+      bypass_dinov2: false
+      train_w_std_loss: true
+      train_w_reward_loss: false
+
+    encoder:
+      _target_: models.dinov3.DinoV3Encoder
+      name: dinov3_vits16
+      feature_key: x_norm_patchtokens
+      repo_dir: ${project_root}/dependencies/dinov3
+      weights: ${checkpoint_dir}/dino/dinov3_vits16_pretrain_lvd1689m-08c60483.pth
+
+    predictor:
+      _target_: models.vit.ViTPredictor
+      depth: 6
+      heads: 16
+      mlp_dim: 2048
+      dropout: 0.1
+      emb_dropout: 0
+      pool: mean
+
+    decoder:
+      _target_: models.vqvae.VQVAE
+      channel: 384
+      n_embed: 2048
+      n_res_block: 4
+      n_res_channel: 128
+      quantize: false
+
+    action_encoder:
+      _target_: models.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    proprio_encoder:
+      _target_: models.proprio.ProprioceptiveEmbedding
+      num_frames: 1
+      tubelet_size: 1
+      use_3d_pos: false
+
+    training:
+      seed: 0
+      epochs: 100
+      batch_size: 40
+      save_every_x_epoch: 1
+      save_best: true
+      reconstruct_every_x_batch: 500
+      num_reconstruct_samples: 6
+      encoder_lr: 5.0e-07
+      decoder_lr: 0.0003
+      predictor_lr: 1.0e-05
+      action_encoder_lr: 1.0e-05
+      bisim_lr: 5.0e-05
+
+    # Planning evals during training; plan_cfg_path null disables them, but Trainer
+    # still reads plan_settings.* so the block has to exist.
+    plan_settings:
+      plan_cfg_path: null
+      planner: [gd, cem]
+      goal_source: [dset, random_state]
+      goal_H: [5]
+      alpha: [0.1, 1]
+
+    # Trainer overwrites these in __init__ (saved_folder <- os.getcwd(), the batch sizes
+    # <- training.batch_size / num_processes). Kept only so the block round-trips.
+    saved_folder: ${output_dir}/../dino_bsmpc
+    gpu_batch_size: 40
+    effective_batch_size: 40

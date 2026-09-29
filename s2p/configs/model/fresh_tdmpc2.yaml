@@ -1,0 +1,129 @@
+# tdmcp2 teacher configuration
+
+_target_: s2p.models.tdmpc2_world_model.get_or_create
+
+task: ${task}
+
+cfg:
+
+  freeze: false
+
+  tdmpc2_cfg:
+    task: ${task.cfg.task_name}
+    obs: state
+    episodic: false
+    device: ${device}
+
+    # evaluation
+    checkpoint: null
+    # eval_episodes: 5
+    # eval_freq: 50000
+
+    # training
+    # steps: 10_000_000
+    # batch_size: ${trainer.cfg.batch_size}
+    reward_coef: 0.1
+    value_coef: 0.1
+    termination_coef: 1
+    consistency_coef: 20
+    rho: 0.5
+    lr: 3e-4
+    enc_lr_scale: 0.3
+    grad_clip_norm: 20
+    tau: 0.01
+    discount_denom: 5
+    discount_min: 0.95
+    discount_max: 0.995
+    # buffer_size: 1_000_000
+    exp_name: default
+    # data_dir: ???
+
+    # planning
+    mpc: true
+    iterations: 6
+    num_samples: 512
+    num_elites: 64
+    num_pi_trajs: 24
+    horizon: 3
+    min_std: 0.05
+    max_std: 2
+    temperature: 0.5
+
+    # actor
+    log_std_min: -10
+    log_std_max: 2
+    entropy_coef: 1e-4
+
+    # critic
+    num_bins: 101
+    vmin: -10
+    vmax: +10
+
+    # architecture
+    # model_size: ???
+    num_enc_layers: 2
+    enc_dim: 256
+    num_channels: 32
+    mlp_dim: 512
+    latent_dim: ${latent_dimension}
+    task_dim: 96
+    num_q: 5
+    dropout: 0.01
+    simnorm_dim: 8
+
+    # # logging
+    # wandb_project: Distilling-Planners
+    # wandb_entity: <wandb-entity>
+    # wandb_silent: false
+    # enable_wandb: true
+    # save_csv: true
+
+    # misc
+    compile: false
+    # save_video: true
+    # save_agent: true
+    seed: ${seed}
+
+    # convenience
+    # Where the vendored `parse_cfg` builds `work_dir` from. The two checked-out branches of
+    # agents/tdmpc2 disagree about this: `original-tdmpc2` does
+    # `work_dir = Path(cfg.output_dir) / cfg.task / cfg.run_name / cfg.exp_name`, while `main`
+    # builds it from `hydra.utils.get_original_cwd()` and never reads this. Either way
+    # `parse_cfg` overwrites the `work_dir` below, so this is the key that decides where the
+    # vendored code would write -- nothing in S2P reads either.
+    output_dir: ${output_dir}
+    # The other half of that path, and mandatory upstream (`???` in tdmpc2/config.yaml).
+    # A literal rather than ${runner.cfg.run_name}: that key is `???` until a launch script
+    # fills it in, and interpolating it here would make every config that composes this one
+    # fail to *resolve* (not just to run) whenever the run name has not been set. Nothing
+    # reads the path anyway -- S2P uses the modules, never the vendored Trainer or Logger.
+    run_name: s2p
+    work_dir: /path/to/tdmpc2_data/outputs
+    task_title: TDMPC2 World Model
+    multitask: false
+    # tasks: mt30
+    # obs_shape: ???
+    # action_dim: ???
+    # episode_length: ???
+    # obs_shapes: ???
+    # action_dims: ???
+    # episode_lengths: ???
+    # seed_steps: ???
+    # bin_size: ???
+    # The below control how the state dict for a past checkpoint is loaded
+    # You may want to not load the weights for certain modules and train
+    # from scratch, or freeze certain modules.
+      # - encoder
+      # - dynamics
+      # - value
+      # - reward
+      # - task
+    # Must stay empty here: this model starts fresh (tdmpc2_cfg.checkpoint is null), so listing
+    # components has no effect when training from scratch, but it silently discards them when a
+    # checkpoint *is* loaded later via `agent.cfg.checkpoint_folder` - TDMPC2.load() overwrites
+    # every listed component's weights with the fresh init. "value" covers _Qs/_target_Qs_params/
+    # _detach_Qs_params/_pi/_termination, so listing all five left evals with a random critic and
+    # policy. Set this explicitly (per-run override) only when partial warm-starting is intended.
+    components_to_train_from_scratch: []
+    components_to_freeze: []
+

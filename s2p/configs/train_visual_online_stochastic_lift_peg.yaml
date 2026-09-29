@@ -1,0 +1,10 @@
+# LiftPeg run of the online stochastic recipe.
+#
+# Everything that is not task-specific lives in `train_visual_online_stochastic.yaml`; only
+# the differences belong here. Task-agnostic changes go in the base so all three tasks get
+# them, and values the base already sets can be overridden below.
+
+defaults:
+  - train_visual_online_stochastic
+  - override task: maniskill_lift_peg
+  - _self_

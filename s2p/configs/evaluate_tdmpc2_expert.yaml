@@ -1,0 +1,39 @@
+# root configuration that composes component-specific configs via Hydra
+# only the "wiring" is kept here; actual parameters live in sub-files
+
+defaults:
+  - runner: evaluation
+  - task: dm_control_cheetah_jump
+
+  - model@tdmpc2: frozen_single_task_expert_cheetah_jump
+
+  - planner: mppi_with_value
+
+  - agent: fresh_agent
+  
+  - evaluators@evaluators.simulation_task_planning: simulation_task_planning
+  - evaluators@evaluators.real_task_planning: real_task_planning
+  # - evaluators@evaluators.tsne: tsne
+  # - evaluators@evaluators.rollout_error: rollout_error
+  - evaluators@evaluators.plan_latency: plan_latency
+  # - evaluators@evaluators.flops: flops
+
+  - _self_
+
+encoder: ${tdmpc2}
+dynamics: ${tdmpc2}
+reward: ${tdmpc2}
+value: ${tdmpc2}
+policy: ${tdmpc2}
+
+loss_function_weights:
+  distillation: 1.0
+  tdmpc2_value: 1.0
+
+latent_dimension: 512
+device: cuda:0
+seed: 1
+
+data_dir: ???
+checkpoint_dir: ???
+output_dir: ???

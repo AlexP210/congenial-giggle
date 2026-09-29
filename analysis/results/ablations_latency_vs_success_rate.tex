@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Method & Default & Bright & Warm & Colour-Shift \\
+\midrule
+Squeeze-to-Plan (Full) & $0.900 \pm 0.095$ & $0.800 \pm 0.126$ & $0.800 \pm 0.126$ & $0.500 \pm 0.158$ \\
+Fresh Encoder & $0.867 \pm 0.062$ & $0.000 \pm 0.000$ & $0.000 \pm 0.000$ & $0.000 \pm 0.000$ \\
+No Dynamics Gradients & $0.667 \pm 0.086$ & $0.833 \pm 0.068$ & $0.683 \pm 0.060$ & $0.800 \pm 0.073$ \\
+No KL Gradients & $0.567 \pm 0.090$ & $0.533 \pm 0.091$ & $0.283 \pm 0.058$ & $0.100 \pm 0.055$ \\
+No Reward Gradients & $0.400 \pm 0.089$ & $0.433 \pm 0.090$ & $0.367 \pm 0.062$ & $0.567 \pm 0.090$ \\
+\bottomrule
+\end{tabular}
+\caption{Lift Peg ablations: success rate (mean $\pm$ SEM) for the best-performing feasible planner configuration under each lighting preset.}
+\label{tab:ablations_latency_vs_success_rate}
+\end{table}

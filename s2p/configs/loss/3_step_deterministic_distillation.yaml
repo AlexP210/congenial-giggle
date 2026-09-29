@@ -1,0 +1,19 @@
+# distillation loss configuration
+
+_target_: s2p.losses.deterministic_distillation_loss.DeterministicDistillationLoss
+
+cfg:
+  dynamics_mse_coefficient: 10
+  reward_mse_coefficient: 1
+  kl_coefficient: 0.05
+  kl_mode: centered
+  # Ablation switches: stop each term's gradient at the encoder, without removing the term.
+  # False everywhere means every loss trains the encoder, as before.
+  stop_reward_loss: False
+  stop_dynamics_loss: False
+  stop_kl_loss: False
+  use_target_encoder: False
+  latent_rewards_imagination_horizon: 3
+  latent_dynamics_imagination_horizon: 3
+  lam: 1
+  rho: 0.5

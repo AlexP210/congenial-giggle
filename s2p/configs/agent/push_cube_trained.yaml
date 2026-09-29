@@ -1,0 +1,14 @@
+# tdmcp2 teacher configuration
+
+_target_: s2p.models.agent_model.AgentModel
+
+encoder_model: ${encoder}
+dynamics_model: ${dynamics}
+reward_model: ${reward}
+value_model: ${value}
+planner: ${planner}
+policy_model: ${policy}
+
+cfg:
+  freeze: true
+  checkpoint_folder: /path/to/outputs/checkpoints/VisualOnlineStochastic_KLDynamics_NormalCapacityEncoder_RewardCoeff100_TargetGradientsOn_LongerHorizon-20260731_200922/simulation_task_planning/best/
